@@ -33,6 +33,61 @@ function Trail({ points }: { points: { x: number; y: number; z: number }[] }) {
   return <Line points={pts} color="#22c55e" lineWidth={1} dashed />;
 }
 
+function WicketSet({ position }: { position: [number, number, number] }) {
+  const stumpOffsets = [-0.028, 0, 0.028];
+  return (
+    <group position={position}>
+      {stumpOffsets.map((offset, index) => (
+        <mesh key={`stump-${index}`} position={[offset, 0.045, 0]} castShadow>
+          <cylinderGeometry args={[0.004, 0.004, 0.09, 10]} />
+          <meshStandardMaterial color="#fff7ed" roughness={0.9} />
+        </mesh>
+      ))}
+      <mesh position={[-0.014, 0.092, 0]} castShadow>
+        <boxGeometry args={[0.022, 0.006, 0.006]} />
+        <meshStandardMaterial color="#f8fafc" roughness={0.9} />
+      </mesh>
+      <mesh position={[0.014, 0.092, 0]} castShadow>
+        <boxGeometry args={[0.022, 0.006, 0.006]} />
+        <meshStandardMaterial color="#f8fafc" roughness={0.9} />
+      </mesh>
+    </group>
+  );
+}
+
+function SeatRows({ center, isNight }: { center: [number, number, number]; isNight: boolean }) {
+  const rows = [
+    { radius: 3.52, y: 0.34, color: isNight ? "#1d4ed8" : "#1e40af", seats: 56 },
+    { radius: 3.76, y: 0.58, color: isNight ? "#dc2626" : "#ef4444", seats: 64 },
+    { radius: 4.02, y: 0.86, color: isNight ? "#f59e0b" : "#f59e0b", seats: 72 },
+  ];
+
+  return (
+    <group>
+      {rows.map((row) =>
+        Array.from({ length: row.seats }, (_, index) => {
+          const theta = (index / row.seats) * Math.PI * 2;
+          const x = center[0] + Math.cos(theta) * row.radius;
+          const z = center[2] + Math.sin(theta) * row.radius;
+          const inwardYaw = Math.atan2(center[0] - x, center[2] - z);
+          return (
+            <group key={`${row.radius}-${index}`} position={[x, row.y, z]} rotation={[0, inwardYaw, 0]}>
+              <mesh receiveShadow>
+                <boxGeometry args={[0.12, 0.03, 0.08]} />
+                <meshStandardMaterial color={row.color} roughness={0.72} />
+              </mesh>
+              <mesh position={[0, 0.04, -0.026]} receiveShadow>
+                <boxGeometry args={[0.12, 0.08, 0.02]} />
+                <meshStandardMaterial color={row.color} roughness={0.72} />
+              </mesh>
+            </group>
+          );
+        }),
+      )}
+    </group>
+  );
+}
+
 function CornerTower({
   position,
   lightingMode,
@@ -43,35 +98,37 @@ function CornerTower({
   const [x, y, z] = position;
   const isNight = lightingMode === "night";
   const legOffsets: [number, number][] = [
-    [-0.08, -0.08],
-    [0.08, -0.08],
-    [0.08, 0.08],
-    [-0.08, 0.08],
+    [-0.14, -0.14],
+    [0.14, -0.14],
+    [0.14, 0.14],
+    [-0.14, 0.14],
   ];
 
   return (
     <group position={[x, 0, z]}>
       <mesh position={[0, 0.02, 0]} receiveShadow>
-        <cylinderGeometry args={[0.18, 0.22, 0.06, 16]} />
+        <cylinderGeometry args={[0.22, 0.26, 0.07, 18]} />
         <meshStandardMaterial color="#475569" metalness={0.25} roughness={0.85} />
       </mesh>
       {legOffsets.map(([dx, dz], index) => (
         <mesh key={`leg-${index}`} position={[dx, y / 2, dz]} castShadow receiveShadow>
-          <cylinderGeometry args={[0.018, 0.022, y, 10]} />
+          <cylinderGeometry args={[0.015, 0.019, y, 10]} />
           <meshStandardMaterial color="#5b6b80" metalness={0.5} roughness={0.38} />
         </mesh>
       ))}
       {[0.24, 0.5, 0.76].map((fraction) => (
         <mesh key={`ring-${fraction}`} position={[0, y * fraction, 0]} castShadow receiveShadow>
-          <boxGeometry args={[0.24, 0.025, 0.24]} />
+          <boxGeometry args={[0.3, 0.022, 0.3]} />
           <meshStandardMaterial color="#94a3b8" metalness={0.28} roughness={0.55} />
         </mesh>
       ))}
       {[
-        { position: [0, y * 0.28, 0], rotation: [0, 0, Math.PI / 4], size: [0.22, 0.015, 0.015] },
-        { position: [0, y * 0.28, 0], rotation: [0, 0, -Math.PI / 4], size: [0.22, 0.015, 0.015] },
-        { position: [0, y * 0.62, 0], rotation: [0, 0, Math.PI / 4], size: [0.22, 0.015, 0.015] },
-        { position: [0, y * 0.62, 0], rotation: [0, 0, -Math.PI / 4], size: [0.22, 0.015, 0.015] },
+        { position: [0, y * 0.18, 0], rotation: [0, 0, Math.PI / 4], size: [0.24, 0.012, 0.012] },
+        { position: [0, y * 0.18, 0], rotation: [0, 0, -Math.PI / 4], size: [0.24, 0.012, 0.012] },
+        { position: [0, y * 0.44, 0], rotation: [0, 0, Math.PI / 4], size: [0.24, 0.012, 0.012] },
+        { position: [0, y * 0.44, 0], rotation: [0, 0, -Math.PI / 4], size: [0.24, 0.012, 0.012] },
+        { position: [0, y * 0.7, 0], rotation: [0, 0, Math.PI / 4], size: [0.24, 0.012, 0.012] },
+        { position: [0, y * 0.7, 0], rotation: [0, 0, -Math.PI / 4], size: [0.24, 0.012, 0.012] },
       ].map((brace, index) => (
         <mesh
           key={`brace-${index}`}
@@ -83,19 +140,9 @@ function CornerTower({
           <meshStandardMaterial color="#7c8ba1" metalness={0.38} roughness={0.42} />
         </mesh>
       ))}
-      <mesh position={[0, y + 0.06, 0]} castShadow receiveShadow>
-        <boxGeometry args={[0.32, 0.06, 0.32]} />
+      <mesh position={[0, y + 0.08, 0]} castShadow receiveShadow>
+        <boxGeometry args={[0.42, 0.05, 0.3]} />
         <meshStandardMaterial color="#1e293b" metalness={0.35} roughness={0.45} />
-      </mesh>
-      <mesh position={[0, y + 0.16, 0]} castShadow>
-        <boxGeometry args={[0.5, 0.04, 0.18]} />
-        <meshStandardMaterial
-          color={isNight ? "#f8fafc" : "#cbd5e1"}
-          emissive={isNight ? "#fff7cc" : "#0f172a"}
-          emissiveIntensity={isNight ? 1.1 : 0.08}
-          metalness={0.22}
-          roughness={0.45}
-        />
       </mesh>
       {isNight ? (
         <>
@@ -154,20 +201,48 @@ function StadiumGround({
         </mesh>
       ))}
 
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[center[0], 0.021, center[2]]} receiveShadow>
+        <circleGeometry args={[0.92, 96]} />
+        <meshStandardMaterial color={isNight ? "#7fbf6a" : "#93d277"} roughness={1} />
+      </mesh>
+
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[center[0], 0.024, center[2]]} receiveShadow>
-        <planeGeometry args={[0.34, 1.1]} />
-        <meshStandardMaterial color="#cdb994" roughness={0.98} />
+        <planeGeometry args={[0.98, 2.08]} />
+        <meshStandardMaterial color="#4a2813" roughness={0.98} />
       </mesh>
 
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[center[0], 0.026, center[2] - 0.32]} receiveShadow>
-        <planeGeometry args={[0.22, 0.08]} />
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[center[0], 0.026, center[2]]} receiveShadow>
+        <planeGeometry args={[0.82, 1.92]} />
+        <meshStandardMaterial color="#6b3a19" roughness={0.95} />
+      </mesh>
+
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[center[0], 0.029, center[2] - 0.58]} receiveShadow>
+        <planeGeometry args={[0.48, 0.12]} />
         <meshStandardMaterial color="#efe4c5" roughness={1} />
       </mesh>
 
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[center[0], 0.026, center[2] + 0.32]} receiveShadow>
-        <planeGeometry args={[0.22, 0.08]} />
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[center[0], 0.029, center[2] + 0.58]} receiveShadow>
+        <planeGeometry args={[0.48, 0.12]} />
         <meshStandardMaterial color="#efe4c5" roughness={1} />
       </mesh>
+
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[center[0], 0.03, center[2] - 0.78]} receiveShadow>
+        <planeGeometry args={[0.58, 0.04]} />
+        <meshStandardMaterial color="#f8fafc" roughness={1} />
+      </mesh>
+
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[center[0], 0.03, center[2] + 0.78]} receiveShadow>
+        <planeGeometry args={[0.58, 0.04]} />
+        <meshStandardMaterial color="#f8fafc" roughness={1} />
+      </mesh>
+
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[center[0], 0.031, center[2]]} receiveShadow>
+        <planeGeometry args={[0.2, 1.94]} />
+        <meshStandardMaterial color="#2b1509" roughness={1} />
+      </mesh>
+
+      <WicketSet position={[center[0], 0.031, center[2] - 0.68]} />
+      <WicketSet position={[center[0], 0.031, center[2] + 0.68]} />
 
       <Line points={boundary} color="#f8fafc" lineWidth={1.3} />
       <Line points={innerRing} color="#d9f99d" lineWidth={0.9} dashed dashSize={0.08} gapSize={0.06} />
@@ -184,6 +259,8 @@ function StadiumGround({
           />
         </mesh>
       ))}
+
+      <SeatRows center={center} isNight={isNight} />
 
       <mesh position={[center[0], 0.98, center[2]]} receiveShadow>
         <cylinderGeometry args={[4.02, 4.62, 0.18, 72, 1, true]} />
@@ -278,6 +355,11 @@ export function SpiderScene({
   const centerX = anchors.reduce((sum, anchor) => sum + anchor[0], 0) / anchors.length;
   const centerZ = anchors.reduce((sum, anchor) => sum + anchor[2], 0) / anchors.length;
   const center: [number, number, number] = [centerX, 0, centerZ];
+  const displayAnchors = anchors.map(([x, y, z]) => {
+    const dx = x - centerX;
+    const dz = z - centerZ;
+    return [centerX + dx * 1.28, y, centerZ + dz * 1.28] as [number, number, number];
+  });
   const P: [number, number, number] = state
     ? [state.position.x, state.position.z, state.position.y]
     : [centerX, 0.9, centerZ];
@@ -339,12 +421,16 @@ export function SpiderScene({
           mieCoefficient={isNight ? 0.02 : 0.005}
         />
         <StadiumGround center={center} lightingMode={lightingMode} />
-        <Line points={[...anchors, anchors[0]]} color={isNight ? "#64748b" : "#94a3b8"} lineWidth={1.6} />
-        {anchors.map((anchor, index) => (
+        <Line
+          points={[...displayAnchors, displayAnchors[0]]}
+          color={isNight ? "#64748b" : "#94a3b8"}
+          lineWidth={1.6}
+        />
+        {displayAnchors.map((anchor, index) => (
           <Line key={`cable-${index}`} points={[anchor, P]} color="#ef4444" lineWidth={2.1} />
         ))}
         <Trail points={state.trail} />
-        {anchors.map((anchor, index) => (
+        {displayAnchors.map((anchor, index) => (
           <CornerTower key={`tower-${index}`} position={anchor} lightingMode={lightingMode} />
         ))}
         <mesh position={P} castShadow>
