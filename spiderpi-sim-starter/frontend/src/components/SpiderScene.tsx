@@ -3,6 +3,8 @@ import { OrbitControls, Line, Html, Environment, Sky } from "@react-three/drei";
 import { SpiderState } from "../types";
 import * as THREE from "three";
 
+type LightingMode = "day" | "night";
+
 function circlePoints(
   radius: number,
   y: number,
@@ -25,56 +27,126 @@ function Trail({ points }: { points: { x: number; y: number; z: number }[] }) {
   return <Line points={pts} color="#22c55e" lineWidth={1} dashed />;
 }
 
-function CornerTower({ position }: { position: [number, number, number] }) {
+function CornerTower({
+  position,
+  lightingMode,
+}: {
+  position: [number, number, number];
+  lightingMode: LightingMode;
+}) {
   const [x, y, z] = position;
+  const isNight = lightingMode === "night";
+  const legOffsets: [number, number][] = [
+    [-0.08, -0.08],
+    [0.08, -0.08],
+    [0.08, 0.08],
+    [-0.08, 0.08],
+  ];
+
   return (
     <group position={[x, 0, z]}>
       <mesh position={[0, 0.02, 0]} receiveShadow>
-        <cylinderGeometry args={[0.12, 0.16, 0.04, 16]} />
-        <meshStandardMaterial color="#3f4c64" metalness={0.25} roughness={0.85} />
+        <cylinderGeometry args={[0.18, 0.22, 0.06, 16]} />
+        <meshStandardMaterial color="#475569" metalness={0.25} roughness={0.85} />
       </mesh>
-      <mesh position={[0, y / 2, 0]} castShadow receiveShadow>
-        <cylinderGeometry args={[0.035, 0.05, y, 12]} />
-        <meshStandardMaterial color="#64748b" metalness={0.45} roughness={0.4} />
-      </mesh>
+      {legOffsets.map(([dx, dz], index) => (
+        <mesh key={`leg-${index}`} position={[dx, y / 2, dz]} castShadow receiveShadow>
+          <cylinderGeometry args={[0.018, 0.022, y, 10]} />
+          <meshStandardMaterial color="#5b6b80" metalness={0.5} roughness={0.38} />
+        </mesh>
+      ))}
+      {[0.24, 0.5, 0.76].map((fraction) => (
+        <mesh key={`ring-${fraction}`} position={[0, y * fraction, 0]} castShadow receiveShadow>
+          <boxGeometry args={[0.24, 0.025, 0.24]} />
+          <meshStandardMaterial color="#94a3b8" metalness={0.28} roughness={0.55} />
+        </mesh>
+      ))}
+      {[
+        { position: [0, y * 0.28, 0], rotation: [0, 0, Math.PI / 4], size: [0.22, 0.015, 0.015] },
+        { position: [0, y * 0.28, 0], rotation: [0, 0, -Math.PI / 4], size: [0.22, 0.015, 0.015] },
+        { position: [0, y * 0.62, 0], rotation: [0, 0, Math.PI / 4], size: [0.22, 0.015, 0.015] },
+        { position: [0, y * 0.62, 0], rotation: [0, 0, -Math.PI / 4], size: [0.22, 0.015, 0.015] },
+      ].map((brace, index) => (
+        <mesh
+          key={`brace-${index}`}
+          position={brace.position as [number, number, number]}
+          rotation={brace.rotation as [number, number, number]}
+          castShadow
+        >
+          <boxGeometry args={brace.size as [number, number, number]} />
+          <meshStandardMaterial color="#7c8ba1" metalness={0.38} roughness={0.42} />
+        </mesh>
+      ))}
       <mesh position={[0, y + 0.06, 0]} castShadow receiveShadow>
-        <boxGeometry args={[0.2, 0.12, 0.2]} />
-        <meshStandardMaterial color="#7dd3fc" emissive="#164e63" emissiveIntensity={0.45} />
+        <boxGeometry args={[0.32, 0.06, 0.32]} />
+        <meshStandardMaterial color="#1e293b" metalness={0.35} roughness={0.45} />
       </mesh>
-      <mesh position={[0, y + 0.13, 0]} castShadow>
-        <boxGeometry args={[0.32, 0.03, 0.12]} />
-        <meshStandardMaterial color="#cbd5e1" metalness={0.2} roughness={0.55} />
+      <mesh position={[0, y + 0.16, 0]} castShadow>
+        <boxGeometry args={[0.5, 0.04, 0.18]} />
+        <meshStandardMaterial
+          color={isNight ? "#f8fafc" : "#cbd5e1"}
+          emissive={isNight ? "#fff7cc" : "#0f172a"}
+          emissiveIntensity={isNight ? 1.1 : 0.08}
+          metalness={0.22}
+          roughness={0.45}
+        />
       </mesh>
+      {isNight ? (
+        <>
+          <pointLight position={[0, y + 0.2, 0]} intensity={12} distance={6.5} decay={2} color="#fff7d6" />
+          <pointLight position={[0, y + 0.16, 0]} intensity={6} distance={3.2} decay={2} color="#cbd5ff" />
+        </>
+      ) : null}
     </group>
   );
 }
 
-function StadiumGround({ center }: { center: [number, number, number] }) {
+function StadiumGround({
+  center,
+  lightingMode,
+}: {
+  center: [number, number, number];
+  lightingMode: LightingMode;
+}) {
+  const isNight = lightingMode === "night";
   const boundary = circlePoints(2.28, 0.02, center, 96);
   const innerRing = circlePoints(1.48, 0.02, center, 96);
   const pitchGuide = circlePoints(0.58, 0.018, center, 96);
+  const grassBands = [
+    { radius: 2.42, color: isNight ? "#2d7f3a" : "#51a653", y: 0.012 },
+    { radius: 1.98, color: isNight ? "#256f34" : "#4a9e4e", y: 0.014 },
+    { radius: 1.54, color: isNight ? "#2d7f3a" : "#58ad58", y: 0.016 },
+    { radius: 1.08, color: isNight ? "#327f3f" : "#63b95d", y: 0.018 },
+  ];
+  const seatBands = [
+    { y: 0.42, inner: 3.15, outer: 4.12, color: isNight ? "#475569" : "#94a3b8" },
+    { y: 0.78, inner: 3.42, outer: 4.36, color: isNight ? "#334155" : "#cbd5e1" },
+    { y: 1.18, inner: 3.7, outer: 4.7, color: isNight ? "#1e293b" : "#e2e8f0" },
+  ];
 
   return (
     <group>
       <mesh position={[center[0], -0.08, center[2]]} receiveShadow>
         <cylinderGeometry args={[4.8, 5.2, 0.18, 80]} />
-        <meshStandardMaterial color="#334155" roughness={0.92} />
+        <meshStandardMaterial color={isNight ? "#111827" : "#334155"} roughness={0.92} />
       </mesh>
 
       <mesh position={[center[0], 0, center[2]]} receiveShadow>
         <cylinderGeometry args={[4.2, 4.2, 0.06, 96]} />
-        <meshStandardMaterial color="#437057" roughness={1} />
+        <meshStandardMaterial color={isNight ? "#1f4f2c" : "#437057"} roughness={1} />
       </mesh>
 
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[center[0], 0.012, center[2]]} receiveShadow>
-        <circleGeometry args={[2.42, 96]} />
-        <meshStandardMaterial color="#51a653" roughness={1} />
-      </mesh>
-
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[center[0], 0.018, center[2]]} receiveShadow>
-        <circleGeometry args={[1.08, 96]} />
-        <meshStandardMaterial color="#63b95d" roughness={1} />
-      </mesh>
+      {grassBands.map((band) => (
+        <mesh
+          key={`grass-${band.radius}`}
+          rotation={[-Math.PI / 2, 0, 0]}
+          position={[center[0], band.y, center[2]]}
+          receiveShadow
+        >
+          <circleGeometry args={[band.radius, 96]} />
+          <meshStandardMaterial color={band.color} roughness={1} />
+        </mesh>
+      ))}
 
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[center[0], 0.024, center[2]]} receiveShadow>
         <planeGeometry args={[0.34, 1.1]} />
@@ -95,22 +167,24 @@ function StadiumGround({ center }: { center: [number, number, number] }) {
       <Line points={innerRing} color="#d9f99d" lineWidth={0.9} dashed dashSize={0.08} gapSize={0.06} />
       <Line points={pitchGuide} color="#86efac" lineWidth={0.7} dashed dashSize={0.05} gapSize={0.05} />
 
-      <mesh position={[center[0], 0.55, center[2]]} receiveShadow>
-        <cylinderGeometry args={[3.55, 4.15, 1.1, 72, 1, true]} />
-        <meshStandardMaterial
-          color="#cbd5e1"
-          metalness={0.08}
-          roughness={0.82}
-          side={THREE.DoubleSide}
-        />
-      </mesh>
+      {seatBands.map((band) => (
+        <mesh key={`seat-${band.y}`} position={[center[0], band.y, center[2]]} receiveShadow>
+          <cylinderGeometry args={[band.inner, band.outer, 0.3, 72, 1, true]} />
+          <meshStandardMaterial
+            color={band.color}
+            metalness={0.06}
+            roughness={0.88}
+            side={THREE.DoubleSide}
+          />
+        </mesh>
+      ))}
 
       <mesh position={[center[0], 0.98, center[2]]} receiveShadow>
-        <cylinderGeometry args={[3.85, 4.45, 0.28, 72, 1, true]} />
+        <cylinderGeometry args={[4.02, 4.62, 0.18, 72, 1, true]} />
         <meshStandardMaterial
-          color="#94a3b8"
-          metalness={0.06}
-          roughness={0.88}
+          color={isNight ? "#0f172a" : "#64748b"}
+          metalness={0.08}
+          roughness={0.82}
           side={THREE.DoubleSide}
         />
       </mesh>
@@ -128,8 +202,15 @@ function StadiumGround({ center }: { center: [number, number, number] }) {
   );
 }
 
-export function SpiderScene({ state }: { state: SpiderState | null }) {
+export function SpiderScene({
+  state,
+  lightingMode,
+}: {
+  state: SpiderState | null;
+  lightingMode: LightingMode;
+}) {
   if (!state) return <div className="sceneFallback">Loading 3D scene...</div>;
+  const isNight = lightingMode === "night";
   const anchors = Object.entries(state.anchors)
     .sort(([a], [b]) => a.localeCompare(b))
     .map(([, [x, y, z]]) => [x, z, y] as [number, number, number]);
@@ -141,26 +222,33 @@ export function SpiderScene({ state }: { state: SpiderState | null }) {
   return (
     <div className="sceneWrap">
       <Canvas shadows camera={{ position: [4.9, 2.6, 4.8], fov: 40 }}>
-        <color attach="background" args={["#b7d8ff"]} />
-        <fog attach="fog" args={["#b7d8ff", 8, 20]} />
-        <ambientLight intensity={1} />
-        <hemisphereLight args={["#f0f9ff", "#365314", 1.15]} />
+        <color attach="background" args={[isNight ? "#08111f" : "#b7d8ff"]} />
+        <fog attach="fog" args={[isNight ? "#08111f" : "#b7d8ff", 8, 20]} />
+        <ambientLight intensity={isNight ? 0.28 : 1} color={isNight ? "#9db4ff" : "#ffffff"} />
+        <hemisphereLight
+          args={[isNight ? "#19325f" : "#f0f9ff", isNight ? "#0b1f0f" : "#365314", isNight ? 0.45 : 1.15]}
+        />
         <directionalLight
-          position={[5, 6, 2]}
-          intensity={2.1}
+          position={isNight ? [2.5, 5, -1] : [5, 6, 2]}
+          intensity={isNight ? 0.35 : 2.1}
           castShadow
           shadow-mapSize-width={2048}
           shadow-mapSize-height={2048}
         />
-        <Sky sunPosition={[6, 3, 2]} turbidity={7} rayleigh={2.2} />
-        <StadiumGround center={center} />
-        <Line points={[...anchors, anchors[0]]} color="#94a3b8" lineWidth={1.6} />
+        <Sky
+          sunPosition={isNight ? [-4, 1, -2] : [6, 3, 2]}
+          turbidity={isNight ? 12 : 7}
+          rayleigh={isNight ? 0.4 : 2.2}
+          mieCoefficient={isNight ? 0.02 : 0.005}
+        />
+        <StadiumGround center={center} lightingMode={lightingMode} />
+        <Line points={[...anchors, anchors[0]]} color={isNight ? "#64748b" : "#94a3b8"} lineWidth={1.6} />
         {anchors.map((anchor, index) => (
           <Line key={`cable-${index}`} points={[anchor, P]} color="#ef4444" lineWidth={2.1} />
         ))}
         <Trail points={state.trail} />
         {anchors.map((anchor, index) => (
-          <CornerTower key={`tower-${index}`} position={anchor} />
+          <CornerTower key={`tower-${index}`} position={anchor} lightingMode={lightingMode} />
         ))}
         <mesh position={P} castShadow>
           <sphereGeometry args={[0.06, 24, 24]} />
@@ -187,7 +275,7 @@ export function SpiderScene({ state }: { state: SpiderState | null }) {
           minDistance={3.6}
           maxDistance={8.5}
         />
-        <Environment preset="park" />
+        <Environment preset={isNight ? "city" : "park"} />
       </Canvas>
     </div>
   );
