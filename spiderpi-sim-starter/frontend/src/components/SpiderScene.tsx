@@ -34,7 +34,15 @@ export function SpiderScene({ state }: { state: SpiderState | null }) {
         ))}
         <mesh position={P}><sphereGeometry args={[0.06, 24, 24]} /><meshStandardMaterial color={state.estop ? "#dc2626" : "#f59e0b"} /></mesh>
         <mesh position={[P[0], P[1]-0.05, P[2]]}><boxGeometry args={[0.22,0.04,0.12]} /><meshStandardMaterial color="#f8fafc" /></mesh>
-        <Html position={[P[0], P[1]+0.16, P[2]]} center distanceFactor={10}><div className="tele3d">X {state.position.x.toFixed(2)} Y {state.position.y.toFixed(2)} Z {state.position.z.toFixed(2)}</div></Html>
+        <Html position={[P[0], P[1] + 0.18, P[2]]} center transform sprite distanceFactor={6}>
+          <div className="cameraBadge">
+            <img
+              className="cameraPreview"
+              src="/spidercam-reference.png"
+              alt="Spidercam camera"
+            />
+          </div>
+        </Html>
         <OrbitControls makeDefault target={new THREE.Vector3(1, 0.8, 1)} />
         <Environment preset="city" />
       </Canvas>
