@@ -3,3 +3,6 @@ __pycache__/
 *.zip
 .DS_Store
 *.tsbuildinfo
+spiderpi-sim-starter/backend/data/runtime_state.json
+spiderpi-sim-starter/backend/data/runtime_state.lock
+spiderpi-sim-starter/backend/data/sim_loop.lock

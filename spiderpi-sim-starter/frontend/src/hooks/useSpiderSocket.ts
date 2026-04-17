@@ -9,7 +9,7 @@ export function useSpiderSocket() {
   const [connected, setConnected] = useState(false);
   const wsRef = useRef<WebSocket | null>(null);
   const retryRef = useRef<number | null>(null);
-  const syncRef = useRef<number | null>(null);
+  const pollRef = useRef<number | null>(null);
 
   const refreshState = () => {
     fetch(`${HTTP_URL}/state`)
@@ -36,9 +36,10 @@ export function useSpiderSocket() {
   useEffect(() => {
     refreshState();
     connect();
+    pollRef.current = window.setInterval(refreshState, 250);
     return () => {
       if (retryRef.current) window.clearTimeout(retryRef.current);
-      if (syncRef.current) window.clearTimeout(syncRef.current);
+      if (pollRef.current) window.clearInterval(pollRef.current);
       wsRef.current?.close();
     };
   }, []);
@@ -52,44 +53,22 @@ export function useSpiderSocket() {
     refreshState();
   };
 
-  const send = (msg: object, fallback?: () => Promise<void>) => {
-    if (wsRef.current?.readyState === WebSocket.OPEN) {
-      wsRef.current.send(JSON.stringify(msg));
-      if (syncRef.current) window.clearTimeout(syncRef.current);
-      syncRef.current = window.setTimeout(refreshState, 120);
-      return;
-    }
-    void fallback?.();
-  };
-
-  const sendAndPost = (msg: object, path: string, payload?: object) => {
-    if (wsRef.current?.readyState === WebSocket.OPEN) {
-      wsRef.current.send(JSON.stringify(msg));
-    }
-    void post(path, payload);
-  };
-
   const jog = (dx: number, dy: number, dz: number, speed = 0.4) => {
-    send(
-      { type: "jog", dx, dy, dz, speed },
-      async () => {
-        if (!state) return;
-        await post("/move", {
-          x: state.position.x + dx,
-          y: state.position.y + dy,
-          z: state.position.z + dz,
-          speed,
-        });
-      },
-    );
+    if (!state) return;
+    void post("/move", {
+      x: state.position.x + dx,
+      y: state.position.y + dy,
+      z: state.position.z + dz,
+      speed,
+    });
   };
 
   const move = (x: number, y: number, z: number, speed = 0.4) => {
-    send({ type: "move", x, y, z, speed }, () => post("/move", { x, y, z, speed }));
+    void post("/move", { x, y, z, speed });
   };
 
   const runPath = (name: string, opts: Record<string, number> = {}) => {
-    send({ type: "path", name, ...opts }, () => post("/path", { name, ...opts }));
+    void post("/path", { name, ...opts });
   };
 
   return {
@@ -98,8 +77,8 @@ export function useSpiderSocket() {
     jog,
     move,
     runPath,
-    stop: () => sendAndPost({ type: "stop" }, "/stop"),
-    estop: () => sendAndPost({ type: "estop" }, "/estop"),
-    resetEstop: () => sendAndPost({ type: "reset-estop" }, "/reset-estop"),
+    stop: () => void post("/stop"),
+    estop: () => void post("/estop"),
+    resetEstop: () => void post("/reset-estop"),
   };
 }
