@@ -1,0 +1,1 @@
+{"root":["./src/app.tsx","./src/main.tsx","./src/types.ts","./src/components/controls.tsx","./src/components/spiderscene.tsx","./src/components/telemetry.tsx","./src/components/topmap.tsx","./src/hooks/usespidersocket.ts"],"version":"5.9.3"}
