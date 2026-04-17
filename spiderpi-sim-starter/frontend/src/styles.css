@@ -108,6 +108,17 @@ button.danger { background: #7f1d1d; border-color: #ef4444; }
 button.warn { background: #78350f; border-color: #f59e0b; }
 .kv { display: flex; justify-content: space-between; border-bottom: 1px solid rgba(148, 163, 184, 0.12); padding: 6px 0; }
 .map { display: block; margin: 8px auto; }
+.mapHint {
+  margin-bottom: 8px;
+  color: #94a3b8;
+  font-size: 13px;
+}
+.mapMarker { cursor: grab; }
+.mapMarker:active { cursor: grabbing; }
+.mapMarker.disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
 .pill { padding: 8px 12px; border-radius: 999px; font-size: 14px; border: 1px solid; }
 .pill.ok { color: #86efac; border-color: #15803d; background: rgba(22, 101, 52, 0.25); }
 .pill.bad { color: #fca5a5; border-color: #b91c1c; background: rgba(127, 29, 29, 0.25); }

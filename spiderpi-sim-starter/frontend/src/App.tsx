@@ -12,7 +12,7 @@ export default function App() {
   const [sidebarWidth, setSidebarWidth] = useState(420);
   const [isResizing, setIsResizing] = useState(false);
   const layoutRef = useRef<HTMLElement | null>(null);
-  const { state, connected, jog, runPath, stop, estop, resetEstop } = useSpiderSocket();
+  const { state, connected, jog, move, runPath, stop, estop, resetEstop } = useSpiderSocket();
 
   useEffect(() => {
     if (!isResizing) return;
@@ -121,7 +121,7 @@ export default function App() {
             aria-label="Resize sidebar"
           />
           <Controls state={state} jog={jog} runPath={runPath} stop={stop} estop={estop} resetEstop={resetEstop} />
-          <TopMap state={state} />
+          <TopMap state={state} move={move} />
           <Telemetry state={state} connected={connected} />
         </section>
       </main>
