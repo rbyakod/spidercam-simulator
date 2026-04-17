@@ -16,8 +16,8 @@ export function Controls({ state, jog, runPath, stop, estop, resetEstop }:{
         <button onClick={() => jog(0,0.1,0)}>Back</button>
         <button onClick={() => jog(-0.1,0,0)}>Left</button>
         <button onClick={() => jog(0.1,0,0)}>Right</button>
-        <button onClick={() => jog(0,0,0.08)}>Down</button>
-        <button onClick={() => jog(0,0,-0.08)}>Up</button>
+        <button onClick={() => jog(0,0,-0.08)}>Down</button>
+        <button onClick={() => jog(0,0,0.08)}>Up</button>
       </div>
       <div className="grid2">
         <button onClick={() => runPath('square', { size:0.8, z:state.target.z, speed:0.35 })}>Square</button>
