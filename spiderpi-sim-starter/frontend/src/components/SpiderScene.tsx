@@ -1,9 +1,15 @@
-import { Canvas } from "@react-three/fiber";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { Canvas, useThree } from "@react-three/fiber";
 import { OrbitControls, Line, Html, Environment, Sky } from "@react-three/drei";
 import { SpiderState } from "../types";
 import * as THREE from "three";
+import type { OrbitControls as OrbitControlsImpl } from "three-stdlib";
 
 type LightingMode = "day" | "night";
+type ViewPreset = "side" | "top" | "front";
+const SIDE_VIEW_OFFSET = new THREE.Vector3(3.9, 1.95, 3.8);
+const TOP_VIEW_OFFSET = new THREE.Vector3(0, 5.4, 0.45);
+const FRONT_VIEW_OFFSET = new THREE.Vector3(0, 1.25, 5.3);
 
 function circlePoints(
   radius: number,
@@ -202,6 +208,54 @@ function StadiumGround({
   );
 }
 
+function SceneCameraControls({
+  center,
+  viewPreset,
+  resetSignal,
+}: {
+  center: [number, number, number];
+  viewPreset: ViewPreset;
+  resetSignal: number;
+}) {
+  const controlsRef = useRef<OrbitControlsImpl | null>(null);
+  const { camera } = useThree();
+  const target = useMemo(
+    () => new THREE.Vector3(center[0], 0.65, center[2]),
+    [center[0], center[2]],
+  );
+  const offset = viewPreset === "top"
+    ? TOP_VIEW_OFFSET
+    : viewPreset === "front"
+      ? FRONT_VIEW_OFFSET
+      : SIDE_VIEW_OFFSET;
+
+  useEffect(() => {
+    const controls = controlsRef.current;
+    if (!controls) return;
+    camera.position.set(
+      target.x + offset.x,
+      target.y + offset.y,
+      target.z + offset.z,
+    );
+    controls.target.copy(target);
+    controls.update();
+  }, [camera, offset, target, resetSignal]);
+
+  return (
+    <OrbitControls
+      ref={(instance) => {
+        controlsRef.current = instance;
+      }}
+      makeDefault
+      target={target}
+      minPolarAngle={0.1}
+      maxPolarAngle={1.5}
+      minDistance={3.6}
+      maxDistance={8.5}
+    />
+  );
+}
+
 export function SpiderScene({
   state,
   lightingMode,
@@ -209,18 +263,61 @@ export function SpiderScene({
   state: SpiderState | null;
   lightingMode: LightingMode;
 }) {
-  if (!state) return <div className="sceneFallback">Loading 3D scene...</div>;
+  const [resetSignal, setResetSignal] = useState(0);
+  const [viewPreset, setViewPreset] = useState<ViewPreset>("side");
   const isNight = lightingMode === "night";
-  const anchors = Object.entries(state.anchors)
+  const anchorEntries = Object.entries(state?.anchors ?? {
+    A: [0, 0, 1.5],
+    B: [2, 0, 1.5],
+    C: [2, 2, 1.5],
+    D: [0, 2, 1.5],
+  });
+  const anchors = anchorEntries
     .sort(([a], [b]) => a.localeCompare(b))
     .map(([, [x, y, z]]) => [x, z, y] as [number, number, number]);
   const centerX = anchors.reduce((sum, anchor) => sum + anchor[0], 0) / anchors.length;
   const centerZ = anchors.reduce((sum, anchor) => sum + anchor[2], 0) / anchors.length;
   const center: [number, number, number] = [centerX, 0, centerZ];
-  const P: [number, number, number] = [state.position.x, state.position.z, state.position.y];
+  const P: [number, number, number] = state
+    ? [state.position.x, state.position.z, state.position.y]
+    : [centerX, 0.9, centerZ];
+
+  if (!state) return <div className="sceneFallback">Loading 3D scene...</div>;
 
   return (
     <div className="sceneWrap">
+      <div className="sceneControls">
+        <button
+          className={`sceneButton ${viewPreset === "side" ? "active" : ""}`}
+          onClick={() => {
+            setViewPreset("side");
+            setResetSignal((value) => value + 1);
+          }}
+          type="button"
+        >
+          Side View
+        </button>
+        <button
+          className={`sceneButton ${viewPreset === "top" ? "active" : ""}`}
+          onClick={() => {
+            setViewPreset("top");
+            setResetSignal((value) => value + 1);
+          }}
+          type="button"
+        >
+          Top View
+        </button>
+        <button
+          className={`sceneButton ${viewPreset === "front" ? "active" : ""}`}
+          onClick={() => {
+            setViewPreset("front");
+            setResetSignal((value) => value + 1);
+          }}
+          type="button"
+        >
+          Front View
+        </button>
+      </div>
       <Canvas shadows camera={{ position: [4.9, 2.6, 4.8], fov: 40 }}>
         <color attach="background" args={[isNight ? "#08111f" : "#b7d8ff"]} />
         <fog attach="fog" args={[isNight ? "#08111f" : "#b7d8ff", 8, 20]} />
@@ -267,14 +364,7 @@ export function SpiderScene({
             />
           </div>
         </Html>
-        <OrbitControls
-          makeDefault
-          target={new THREE.Vector3(center[0], 0.65, center[2])}
-          minPolarAngle={0.45}
-          maxPolarAngle={1.35}
-          minDistance={3.6}
-          maxDistance={8.5}
-        />
+        <SceneCameraControls center={center} viewPreset={viewPreset} resetSignal={resetSignal} />
         <Environment preset={isNight ? "city" : "park"} />
       </Canvas>
     </div>
