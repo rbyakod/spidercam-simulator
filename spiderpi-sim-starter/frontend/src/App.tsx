@@ -6,6 +6,7 @@ import { Telemetry } from "./components/Telemetry";
 import { TopMap } from "./components/TopMap";
 
 export default function App() {
+  const [sceneMode, setSceneMode] = useState<"engineering" | "stadium">("engineering");
   const [lightingMode, setLightingMode] = useState<"day" | "night">("day");
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [sidebarWidth, setSidebarWidth] = useState(420);
@@ -61,6 +62,22 @@ export default function App() {
           <p>MacBook starter project for React + Three.js + FastAPI</p>
         </div>
         <div className="statusCluster">
+          <div className="viewToggle" aria-label="Scene mode">
+            <button
+              className={sceneMode === "engineering" ? "active" : ""}
+              onClick={() => setSceneMode("engineering")}
+              type="button"
+            >
+              Engineering
+            </button>
+            <button
+              className={sceneMode === "stadium" ? "active" : ""}
+              onClick={() => setSceneMode("stadium")}
+              type="button"
+            >
+              Stadium
+            </button>
+          </div>
           <button
             className="sidebarToggle"
             onClick={() => setSidebarCollapsed((value) => !value)}
@@ -92,7 +109,9 @@ export default function App() {
         className={`layout ${sidebarCollapsed ? "layoutExpanded" : ""} ${isResizing ? "layoutResizing" : ""}`}
         style={layoutStyle}
       >
-        <section className="left"><SpiderScene state={state} lightingMode={lightingMode} /></section>
+        <section className="left">
+          <SpiderScene state={state} lightingMode={lightingMode} sceneMode={sceneMode} />
+        </section>
         <section className={`right ${sidebarCollapsed ? "rightCollapsed" : ""}`}>
           <div
             className="columnResizer"

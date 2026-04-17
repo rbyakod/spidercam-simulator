@@ -6,6 +6,7 @@ import * as THREE from "three";
 import type { OrbitControls as OrbitControlsImpl } from "three-stdlib";
 
 type LightingMode = "day" | "night";
+type SceneMode = "engineering" | "stadium";
 type ViewPreset = "side" | "top" | "front";
 const SIDE_VIEW_OFFSET = new THREE.Vector3(3.9, 1.95, 3.8);
 const TOP_VIEW_OFFSET = new THREE.Vector3(0, 5.4, 0.45);
@@ -91,23 +92,31 @@ function SeatRows({ center, isNight }: { center: [number, number, number]; isNig
 function CornerTower({
   position,
   lightingMode,
+  structuralScale = 1,
 }: {
   position: [number, number, number];
   lightingMode: LightingMode;
+  structuralScale?: number;
 }) {
   const [x, y, z] = position;
   const isNight = lightingMode === "night";
+  const legRadius = 0.14 * structuralScale;
   const legOffsets: [number, number][] = [
-    [-0.14, -0.14],
-    [0.14, -0.14],
-    [0.14, 0.14],
-    [-0.14, 0.14],
+    [-legRadius, -legRadius],
+    [legRadius, -legRadius],
+    [legRadius, legRadius],
+    [-legRadius, legRadius],
   ];
+  const baseRadius = 0.22 * structuralScale;
+  const ringSpan = 0.3 * structuralScale;
+  const braceSpan = 0.24 * structuralScale;
+  const topWidth = 0.42 * structuralScale;
+  const topDepth = 0.3 * structuralScale;
 
   return (
     <group position={[x, 0, z]}>
       <mesh position={[0, 0.02, 0]} receiveShadow>
-        <cylinderGeometry args={[0.22, 0.26, 0.07, 18]} />
+        <cylinderGeometry args={[baseRadius, baseRadius + 0.04, 0.07, 18]} />
         <meshStandardMaterial color="#475569" metalness={0.25} roughness={0.85} />
       </mesh>
       {legOffsets.map(([dx, dz], index) => (
@@ -118,17 +127,17 @@ function CornerTower({
       ))}
       {[0.24, 0.5, 0.76].map((fraction) => (
         <mesh key={`ring-${fraction}`} position={[0, y * fraction, 0]} castShadow receiveShadow>
-          <boxGeometry args={[0.3, 0.022, 0.3]} />
+          <boxGeometry args={[ringSpan, 0.022, ringSpan]} />
           <meshStandardMaterial color="#94a3b8" metalness={0.28} roughness={0.55} />
         </mesh>
       ))}
       {[
-        { position: [0, y * 0.18, 0], rotation: [0, 0, Math.PI / 4], size: [0.24, 0.012, 0.012] },
-        { position: [0, y * 0.18, 0], rotation: [0, 0, -Math.PI / 4], size: [0.24, 0.012, 0.012] },
-        { position: [0, y * 0.44, 0], rotation: [0, 0, Math.PI / 4], size: [0.24, 0.012, 0.012] },
-        { position: [0, y * 0.44, 0], rotation: [0, 0, -Math.PI / 4], size: [0.24, 0.012, 0.012] },
-        { position: [0, y * 0.7, 0], rotation: [0, 0, Math.PI / 4], size: [0.24, 0.012, 0.012] },
-        { position: [0, y * 0.7, 0], rotation: [0, 0, -Math.PI / 4], size: [0.24, 0.012, 0.012] },
+        { position: [0, y * 0.18, 0], rotation: [0, 0, Math.PI / 4], size: [braceSpan, 0.012, 0.012] },
+        { position: [0, y * 0.18, 0], rotation: [0, 0, -Math.PI / 4], size: [braceSpan, 0.012, 0.012] },
+        { position: [0, y * 0.44, 0], rotation: [0, 0, Math.PI / 4], size: [braceSpan, 0.012, 0.012] },
+        { position: [0, y * 0.44, 0], rotation: [0, 0, -Math.PI / 4], size: [braceSpan, 0.012, 0.012] },
+        { position: [0, y * 0.7, 0], rotation: [0, 0, Math.PI / 4], size: [braceSpan, 0.012, 0.012] },
+        { position: [0, y * 0.7, 0], rotation: [0, 0, -Math.PI / 4], size: [braceSpan, 0.012, 0.012] },
       ].map((brace, index) => (
         <mesh
           key={`brace-${index}`}
@@ -141,7 +150,7 @@ function CornerTower({
         </mesh>
       ))}
       <mesh position={[0, y + 0.08, 0]} castShadow receiveShadow>
-        <boxGeometry args={[0.42, 0.05, 0.3]} />
+        <boxGeometry args={[topWidth, 0.05, topDepth]} />
         <meshStandardMaterial color="#1e293b" metalness={0.35} roughness={0.45} />
       </mesh>
       {isNight ? (
@@ -150,6 +159,45 @@ function CornerTower({
           <pointLight position={[0, y + 0.16, 0]} intensity={6} distance={3.2} decay={2} color="#cbd5ff" />
         </>
       ) : null}
+    </group>
+  );
+}
+
+function EngineeringGround({ center }: { center: [number, number, number] }) {
+  return (
+    <group>
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[center[0], -0.01, center[2]]} receiveShadow>
+        <planeGeometry args={[7.2, 7.2]} />
+        <meshStandardMaterial color="#0b1120" roughness={1} />
+      </mesh>
+      <gridHelper
+        args={[7, 14, "#60a5fa", "#1e3a8a"]}
+        position={[center[0], 0.001, center[2]]}
+      />
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[center[0], 0.002, center[2]]} receiveShadow>
+        <ringGeometry args={[1.55, 1.58, 96]} />
+        <meshStandardMaterial color="#38bdf8" emissive="#0ea5e9" emissiveIntensity={0.12} roughness={0.5} />
+      </mesh>
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[center[0], 0.003, center[2]]} receiveShadow>
+        <planeGeometry args={[0.42, 1.48]} />
+        <meshStandardMaterial color="#1e293b" roughness={0.9} />
+      </mesh>
+      <Line
+        points={[
+          [center[0] - 0.5, 0.004, center[2]],
+          [center[0] + 0.5, 0.004, center[2]],
+        ]}
+        color="#22d3ee"
+        lineWidth={1}
+      />
+      <Line
+        points={[
+          [center[0], 0.004, center[2] - 0.8],
+          [center[0], 0.004, center[2] + 0.8],
+        ]}
+        color="#22d3ee"
+        lineWidth={1}
+      />
     </group>
   );
 }
@@ -336,13 +384,16 @@ function SceneCameraControls({
 export function SpiderScene({
   state,
   lightingMode,
+  sceneMode,
 }: {
   state: SpiderState | null;
   lightingMode: LightingMode;
+  sceneMode: SceneMode;
 }) {
   const [resetSignal, setResetSignal] = useState(0);
   const [viewPreset, setViewPreset] = useState<ViewPreset>("side");
   const isNight = lightingMode === "night";
+  const isEngineering = sceneMode === "engineering";
   const anchorEntries = Object.entries(state?.anchors ?? {
     A: [0, 0, 1.5],
     B: [2, 0, 1.5],
@@ -358,8 +409,9 @@ export function SpiderScene({
   const displayAnchors = anchors.map(([x, y, z]) => {
     const dx = x - centerX;
     const dz = z - centerZ;
-    return [centerX + dx * 1.28, y, centerZ + dz * 1.28] as [number, number, number];
+    return [centerX + dx * 1.62, y, centerZ + dz * 1.62] as [number, number, number];
   });
+  const activeAnchors = isEngineering ? anchors : displayAnchors;
   const P: [number, number, number] = state
     ? [state.position.x, state.position.z, state.position.y]
     : [centerX, 0.9, centerZ];
@@ -369,6 +421,7 @@ export function SpiderScene({
   return (
     <div className="sceneWrap">
       <div className="sceneControls">
+        <div className="sceneBadge">{isEngineering ? "Engineering View" : "Stadium View"}</div>
         <button
           className={`sceneButton ${viewPreset === "side" ? "active" : ""}`}
           onClick={() => {
@@ -401,37 +454,48 @@ export function SpiderScene({
         </button>
       </div>
       <Canvas shadows camera={{ position: [4.9, 2.6, 4.8], fov: 40 }}>
-        <color attach="background" args={[isNight ? "#08111f" : "#b7d8ff"]} />
-        <fog attach="fog" args={[isNight ? "#08111f" : "#b7d8ff", 8, 20]} />
-        <ambientLight intensity={isNight ? 0.28 : 1} color={isNight ? "#9db4ff" : "#ffffff"} />
+        <color attach="background" args={[isEngineering ? "#09101d" : isNight ? "#08111f" : "#b7d8ff"]} />
+        <fog attach="fog" args={[isEngineering ? "#09101d" : isNight ? "#08111f" : "#b7d8ff", 8, 20]} />
+        <ambientLight intensity={isEngineering ? 0.75 : isNight ? 0.28 : 1} color={isNight ? "#9db4ff" : "#ffffff"} />
         <hemisphereLight
-          args={[isNight ? "#19325f" : "#f0f9ff", isNight ? "#0b1f0f" : "#365314", isNight ? 0.45 : 1.15]}
+          args={[
+            isEngineering ? "#0f172a" : isNight ? "#19325f" : "#f0f9ff",
+            isEngineering ? "#111827" : isNight ? "#0b1f0f" : "#365314",
+            isEngineering ? 0.85 : isNight ? 0.45 : 1.15,
+          ]}
         />
         <directionalLight
-          position={isNight ? [2.5, 5, -1] : [5, 6, 2]}
-          intensity={isNight ? 0.35 : 2.1}
+          position={isEngineering ? [4, 5.5, 3] : isNight ? [2.5, 5, -1] : [5, 6, 2]}
+          intensity={isEngineering ? 1.35 : isNight ? 0.35 : 2.1}
           castShadow
           shadow-mapSize-width={2048}
           shadow-mapSize-height={2048}
         />
-        <Sky
-          sunPosition={isNight ? [-4, 1, -2] : [6, 3, 2]}
-          turbidity={isNight ? 12 : 7}
-          rayleigh={isNight ? 0.4 : 2.2}
-          mieCoefficient={isNight ? 0.02 : 0.005}
-        />
-        <StadiumGround center={center} lightingMode={lightingMode} />
+        {isEngineering ? null : (
+          <Sky
+            sunPosition={isNight ? [-4, 1, -2] : [6, 3, 2]}
+            turbidity={isNight ? 12 : 7}
+            rayleigh={isNight ? 0.4 : 2.2}
+            mieCoefficient={isNight ? 0.02 : 0.005}
+          />
+        )}
+        {isEngineering ? <EngineeringGround center={center} /> : <StadiumGround center={center} lightingMode={lightingMode} />}
         <Line
-          points={[...displayAnchors, displayAnchors[0]]}
-          color={isNight ? "#64748b" : "#94a3b8"}
+          points={[...activeAnchors, activeAnchors[0]]}
+          color={isEngineering ? "#38bdf8" : isNight ? "#64748b" : "#94a3b8"}
           lineWidth={1.6}
         />
-        {displayAnchors.map((anchor, index) => (
-          <Line key={`cable-${index}`} points={[anchor, P]} color="#ef4444" lineWidth={2.1} />
+        {activeAnchors.map((anchor, index) => (
+          <Line key={`cable-${index}`} points={[anchor, P]} color={isEngineering ? "#22d3ee" : "#ef4444"} lineWidth={2.1} />
         ))}
         <Trail points={state.trail} />
-        {displayAnchors.map((anchor, index) => (
-          <CornerTower key={`tower-${index}`} position={anchor} lightingMode={lightingMode} />
+        {activeAnchors.map((anchor, index) => (
+          <CornerTower
+            key={`tower-${index}`}
+            position={anchor}
+            lightingMode={lightingMode}
+            structuralScale={isEngineering ? 0.88 : 1}
+          />
         ))}
         <mesh position={P} castShadow>
           <sphereGeometry args={[0.06, 24, 24]} />
@@ -451,7 +515,7 @@ export function SpiderScene({
           </div>
         </Html>
         <SceneCameraControls center={center} viewPreset={viewPreset} resetSignal={resetSignal} />
-        <Environment preset={isNight ? "city" : "park"} />
+        <Environment preset={isEngineering ? "warehouse" : isNight ? "city" : "park"} />
       </Canvas>
     </div>
   );
