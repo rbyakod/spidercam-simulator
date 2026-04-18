@@ -1,0 +1,1051 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>SpiderPi Simulator Architecture</title>
+    <style>
+      :root {
+        --bg: #08111f;
+        --panel: rgba(15, 23, 42, 0.9);
+        --panel-strong: #0f172a;
+        --text: #e5eef9;
+        --muted: #9fb0c7;
+        --line: rgba(148, 163, 184, 0.2);
+        --accent: #7dd3fc;
+        --accent-2: #38bdf8;
+        --good: #86efac;
+        --warn: #fcd34d;
+        --bad: #fca5a5;
+        --shadow: 0 24px 48px rgba(2, 6, 23, 0.35);
+        --radius: 18px;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        margin: 0;
+        font-family: "Inter", "Segoe UI", Roboto, Arial, sans-serif;
+        color: var(--text);
+        background:
+          radial-gradient(circle at top left, rgba(56, 189, 248, 0.12), transparent 28%),
+          radial-gradient(circle at top right, rgba(125, 211, 252, 0.08), transparent 22%),
+          linear-gradient(180deg, #06101b 0%, #0b1220 100%);
+      }
+
+      a {
+        color: var(--accent);
+        text-decoration: none;
+      }
+
+      a:hover {
+        text-decoration: underline;
+      }
+
+      .page {
+        width: min(1240px, calc(100vw - 40px));
+        margin: 0 auto;
+        padding: 28px 0 72px;
+      }
+
+      .hero {
+        padding: 36px;
+        border: 1px solid var(--line);
+        border-radius: 28px;
+        background:
+          linear-gradient(135deg, rgba(14, 116, 144, 0.16), rgba(15, 23, 42, 0.9)),
+          linear-gradient(180deg, rgba(15, 23, 42, 0.9), rgba(15, 23, 42, 0.9));
+        box-shadow: var(--shadow);
+      }
+
+      .eyebrow {
+        display: inline-flex;
+        padding: 8px 12px;
+        border-radius: 999px;
+        border: 1px solid rgba(125, 211, 252, 0.24);
+        background: rgba(8, 17, 31, 0.56);
+        color: var(--accent);
+        font-size: 12px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      h1, h2, h3, h4 {
+        margin: 0;
+        line-height: 1.14;
+      }
+
+      h1 {
+        font-size: clamp(34px, 5vw, 54px);
+        margin-top: 16px;
+        max-width: 12ch;
+      }
+
+      .hero p {
+        margin: 18px 0 0;
+        max-width: 78ch;
+        color: var(--muted);
+        font-size: 17px;
+        line-height: 1.6;
+      }
+
+      .hero-grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 14px;
+        margin-top: 28px;
+      }
+
+      .stat {
+        padding: 16px 18px;
+        border-radius: var(--radius);
+        background: rgba(8, 17, 31, 0.58);
+        border: 1px solid var(--line);
+      }
+
+      .stat-label {
+        color: var(--muted);
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+      }
+
+      .stat-value {
+        margin-top: 8px;
+        font-size: 19px;
+        font-weight: 700;
+      }
+
+      .layout {
+        display: grid;
+        grid-template-columns: 280px minmax(0, 1fr);
+        gap: 22px;
+        margin-top: 22px;
+      }
+
+      .toc {
+        position: sticky;
+        top: 18px;
+        align-self: start;
+        padding: 18px;
+        border-radius: var(--radius);
+        border: 1px solid var(--line);
+        background: var(--panel);
+        box-shadow: var(--shadow);
+      }
+
+      .toc h2 {
+        font-size: 15px;
+        margin-bottom: 14px;
+      }
+
+      .toc a {
+        display: block;
+        padding: 7px 0;
+        color: var(--muted);
+        font-size: 14px;
+      }
+
+      .content {
+        display: grid;
+        gap: 20px;
+      }
+
+      .section {
+        padding: 28px;
+        border-radius: 24px;
+        border: 1px solid var(--line);
+        background: var(--panel);
+        box-shadow: var(--shadow);
+      }
+
+      .section h2 {
+        font-size: 28px;
+        margin-bottom: 14px;
+      }
+
+      .section p,
+      .section li {
+        color: var(--muted);
+        line-height: 1.65;
+        font-size: 15px;
+      }
+
+      .section ul,
+      .section ol {
+        margin: 12px 0 0 20px;
+        padding: 0;
+      }
+
+      .cards {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 14px;
+        margin-top: 18px;
+      }
+
+      .card {
+        padding: 18px;
+        border-radius: var(--radius);
+        border: 1px solid var(--line);
+        background: rgba(8, 17, 31, 0.52);
+      }
+
+      .card h3 {
+        font-size: 18px;
+        margin-bottom: 10px;
+      }
+
+      .flow {
+        margin-top: 18px;
+        padding: 18px;
+        overflow: auto;
+        border-radius: var(--radius);
+        border: 1px solid var(--line);
+        background: #09111e;
+      }
+
+      pre,
+      code {
+        font-family: "SFMono-Regular", ui-monospace, Menlo, Monaco, Consolas, monospace;
+      }
+
+      pre {
+        margin: 0;
+        white-space: pre-wrap;
+        color: #dbeafe;
+        font-size: 13px;
+        line-height: 1.55;
+      }
+
+      .kv-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px 18px;
+        margin-top: 18px;
+      }
+
+      .kv {
+        padding: 14px 16px;
+        border-radius: 14px;
+        border: 1px solid var(--line);
+        background: rgba(8, 17, 31, 0.5);
+      }
+
+      .kv strong {
+        display: block;
+        margin-bottom: 6px;
+        color: var(--text);
+        font-size: 14px;
+      }
+
+      .repo-tree,
+      .command-block {
+        margin-top: 16px;
+        padding: 16px 18px;
+        border-radius: var(--radius);
+        border: 1px solid var(--line);
+        background: #09111e;
+      }
+
+      .note,
+      .warn,
+      .danger,
+      .success {
+        margin-top: 18px;
+        padding: 14px 16px;
+        border-radius: 16px;
+        border: 1px solid var(--line);
+      }
+
+      .note {
+        background: rgba(56, 189, 248, 0.08);
+        color: #cdefff;
+      }
+
+      .warn {
+        background: rgba(245, 158, 11, 0.12);
+        color: #fde68a;
+      }
+
+      .danger {
+        background: rgba(239, 68, 68, 0.1);
+        color: var(--bad);
+      }
+
+      .success {
+        background: rgba(34, 197, 94, 0.1);
+        color: var(--good);
+      }
+
+      .table-wrap {
+        overflow: auto;
+        margin-top: 18px;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        min-width: 720px;
+      }
+
+      th,
+      td {
+        padding: 12px 14px;
+        border-bottom: 1px solid var(--line);
+        text-align: left;
+        vertical-align: top;
+      }
+
+      th {
+        color: var(--text);
+        font-size: 13px;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+      }
+
+      td {
+        color: var(--muted);
+        font-size: 14px;
+      }
+
+      .footer {
+        margin-top: 20px;
+        padding: 18px 20px;
+        border-radius: 18px;
+        border: 1px solid var(--line);
+        background: rgba(8, 17, 31, 0.55);
+        color: var(--muted);
+        font-size: 14px;
+      }
+
+      @media (max-width: 1080px) {
+        .layout,
+        .hero-grid,
+        .cards,
+        .kv-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .toc {
+          position: static;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page">
+      <section class="hero">
+        <div class="eyebrow">System Architecture Document</div>
+        <h1>SpiderPi Simulator Detailed Architecture</h1>
+        <p>
+          This document explains the current SpiderPi Simulator system in detail: repository structure, backend runtime, frontend UI,
+          state model, transport layer, configuration, frame-planning UI, and the path to deploying and evolving the project on a
+          Raspberry Pi for future hardware use. It reflects the current workspace code, including the simulator, the engineering and
+          stadium views, XY map drag control, and the frame planner tab.
+        </p>
+        <div class="hero-grid">
+          <div class="stat">
+            <div class="stat-label">Backend Stack</div>
+            <div class="stat-value">FastAPI + Uvicorn + Pydantic</div>
+          </div>
+          <div class="stat">
+            <div class="stat-label">Frontend Stack</div>
+            <div class="stat-value">React + Vite + Three.js</div>
+          </div>
+          <div class="stat">
+            <div class="stat-label">Runtime Model</div>
+            <div class="stat-value">Simulated 4-cable kinematic rig</div>
+          </div>
+          <div class="stat">
+            <div class="stat-label">Hardware Status</div>
+            <div class="stat-value">Parity-oriented, not live-control yet</div>
+          </div>
+        </div>
+      </section>
+
+      <div class="layout">
+        <aside class="toc">
+          <h2>Contents</h2>
+          <a href="#overview">1. System Overview</a>
+          <a href="#repo">2. Repository Layout</a>
+          <a href="#backend">3. Backend Architecture</a>
+          <a href="#frontend">4. Frontend Architecture</a>
+          <a href="#state">5. Runtime State Model</a>
+          <a href="#config">6. Configuration Model</a>
+          <a href="#planner">7. Frame Planner UI</a>
+          <a href="#flows">8. Runtime Flows</a>
+          <a href="#build">9. Build and Run</a>
+          <a href="#rpi">10. Raspberry Pi Deployment Path</a>
+          <a href="#hardware">11. Future Hardware Integration</a>
+          <a href="#limits">12. Current Limits and Risks</a>
+        </aside>
+
+        <main class="content">
+          <section class="section" id="overview">
+            <h2>1. System Overview</h2>
+            <p>
+              SpiderPi Simulator is a local two-process application that models a Spidercam-style four-cable camera rig. The backend is the
+              authoritative machine-state owner. It computes carriage position, cable lengths, spool movement, and simulated motor step
+              deltas. The frontend is a client that visualizes that state, provides operator controls, and includes planning tools for
+              designing a physical frame.
+            </p>
+            <div class="flow">
+              <pre>Operator UI
+  ├─ Simulator tab
+  │   ├─ 3D scene (Engineering / Stadium)
+  │   ├─ XY map with drag-to-move
+  │   ├─ controls panel
+  │   └─ telemetry panel
+  └─ Frame Planner tab
+      ├─ frame geometry inputs
+      ├─ drive parameter inputs
+      ├─ computed anchors / bounds / cable travel
+      └─ engineering preview
+
+Frontend transport hook
+  ├─ GET /state polling fallback
+  ├─ POST /move, /path, /stop, /estop, /reset-estop
+  └─ WebSocket /ws state subscription
+
+FastAPI backend
+  ├─ config load
+  ├─ shared runtime state
+  ├─ motion target and path handling
+  ├─ 60 Hz simulation loop
+  ├─ 20 Hz state broadcast loop
+  └─ geometry-derived cable calculations</pre>
+            </div>
+            <div class="cards">
+              <div class="card">
+                <h3>Primary Purpose</h3>
+                <p>Provide a visual and interactive simulator for a cable-camera system, with enough geometry and drive math to support planning and future hardware parity.</p>
+              </div>
+              <div class="card">
+                <h3>Current Operating Mode</h3>
+                <p>Simulation only. The project exposes hardware-oriented config fields and a parity plan, but it does not yet drive GPIO, step pulses, or limit switches on real hardware.</p>
+              </div>
+            </div>
+          </section>
+
+          <section class="section" id="repo">
+            <h2>2. Repository Layout</h2>
+            <div class="repo-tree">
+              <pre>spiderpi-sim-starter/
+├── backend/
+│   ├── main.py
+│   ├── persistent_config.py
+│   ├── planner.py
+│   ├── requirements.txt
+│   └── data/
+│       ├── spiderpi.yaml
+│       ├── runtime_state.json
+│       └── *.lock
+├── frontend/
+│   ├── package.json
+│   ├── vite.config.ts
+│   ├── tsconfig.json
+│   ├── public/
+│   │   └── spidercam-reference.png
+│   └── src/
+│       ├── App.tsx
+│       ├── main.tsx
+│       ├── styles.css
+│       ├── types.ts
+│       ├── hooks/
+│       │   └── useSpiderSocket.ts
+│       └── components/
+│           ├── Controls.tsx
+│           ├── Telemetry.tsx
+│           ├── TopMap.tsx
+│           ├── SpiderScene.tsx
+│           └── FramePlanner.tsx
+└── docs/
+    ├── ARCHITECTURE.md
+    ├── HARDWARE_PARITY_PLAN.md
+    └── ARCHITECTURE_DETAILED.html</pre>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Path</th>
+                    <th>Role</th>
+                    <th>What it does</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><code>backend/main.py</code></td>
+                    <td>Runtime core</td>
+                    <td>Starts FastAPI, owns shared simulator state, handles commands, advances motion, and broadcasts state.</td>
+                  </tr>
+                  <tr>
+                    <td><code>backend/persistent_config.py</code></td>
+                    <td>Typed configuration</td>
+                    <td>Defines the YAML-backed config tree for frame geometry, rig properties, motor tuning, GPIO mapping, and calibration placeholders.</td>
+                  </tr>
+                  <tr>
+                    <td><code>backend/planner.py</code></td>
+                    <td>Path generator</td>
+                    <td>Builds waypoint arrays for square and circle demo paths.</td>
+                  </tr>
+                  <tr>
+                    <td><code>frontend/src/App.tsx</code></td>
+                    <td>Top-level UI shell</td>
+                    <td>Creates simulator/planner tabs, scene mode toggles, lighting mode, collapsible sidebar, and main layout.</td>
+                  </tr>
+                  <tr>
+                    <td><code>frontend/src/hooks/useSpiderSocket.ts</code></td>
+                    <td>Transport hook</td>
+                    <td>Handles WebSocket state subscription, HTTP command posting, connection status, and polling fallback.</td>
+                  </tr>
+                  <tr>
+                    <td><code>frontend/src/components/SpiderScene.tsx</code></td>
+                    <td>3D rendering</td>
+                    <td>Renders engineering and stylized stadium scenes, camera carriage, towers, cables, and view presets.</td>
+                  </tr>
+                  <tr>
+                    <td><code>frontend/src/components/TopMap.tsx</code></td>
+                    <td>XY control surface</td>
+                    <td>Shows top-down position and supports bounded drag-to-move of the carriage in X/Y while holding current Z.</td>
+                  </tr>
+                  <tr>
+                    <td><code>frontend/src/components/FramePlanner.tsx</code></td>
+                    <td>Design calculator</td>
+                    <td>Lets a user input target frame dimensions and drive values, then computes anchors, bounds, cable travel, and drive conversions.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <section class="section" id="backend">
+            <h2>3. Backend Architecture</h2>
+            <p>
+              The backend is intentionally compact and centered in <code>backend/main.py</code>. It loads configuration once at startup,
+              exposes REST and WebSocket endpoints, maintains a shared runtime state file, and advances the simulated carriage over time.
+            </p>
+            <div class="cards">
+              <div class="card">
+                <h3>Framework</h3>
+                <p>FastAPI provides routing and WebSocket support. Uvicorn runs the ASGI app. Pydantic validates request payloads and configuration data.</p>
+              </div>
+              <div class="card">
+                <h3>Persistence Strategy</h3>
+                <p>Configuration is persisted in YAML. Runtime simulator state is persisted to a JSON file and protected with lock files so dev reload mode does not split machine state across processes.</p>
+              </div>
+            </div>
+            <div class="kv-grid">
+              <div class="kv">
+                <strong>Startup</strong>
+                Load config, derive anchors/bounds/spool parameters, ensure runtime files exist, acquire leader lock, start sim loop and push loop.
+              </div>
+              <div class="kv">
+                <strong>Motion Model</strong>
+                Point-to-point constant-speed movement toward target in XYZ. Cable lengths and step counts are derived from geometry on each tick.
+              </div>
+              <div class="kv">
+                <strong>State Broadcast</strong>
+                Current state is pushed to WebSocket clients roughly 20 times per second.
+              </div>
+              <div class="kv">
+                <strong>Safety Model</strong>
+                Current safety is limited to bounds clamping and E-stop latching. There is not yet any cable tension, collision, or physical feasibility model.
+              </div>
+            </div>
+
+            <h3 style="margin-top:22px;">Backend functions and what they do</h3>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Function / Object</th>
+                    <th>Location</th>
+                    <th>Purpose</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><code>Manager</code></td>
+                    <td><code>backend/main.py</code></td>
+                    <td>Tracks connected WebSocket clients and broadcasts serialized state payloads.</td>
+                  </tr>
+                  <tr>
+                    <td><code>lengths_from_xyz()</code></td>
+                    <td><code>backend/main.py</code></td>
+                    <td>Computes Euclidean cable length from each anchor to the carriage position.</td>
+                  </tr>
+                  <tr>
+                    <td><code>steps_from_delta_length()</code></td>
+                    <td><code>backend/main.py</code></td>
+                    <td>Converts cable length change into motor steps using spool circumference, motor steps/rev, and microstepping.</td>
+                  </tr>
+                  <tr>
+                    <td><code>default_state()</code></td>
+                    <td><code>backend/main.py</code></td>
+                    <td>Creates the initial machine state, including current position, bounds, anchors, lengths, and empty trail/path data.</td>
+                  </tr>
+                  <tr>
+                    <td><code>with_state_lock()</code></td>
+                    <td><code>backend/main.py</code></td>
+                    <td>Central state accessor that loads runtime JSON, applies mutations, and writes it back under an exclusive lock.</td>
+                  </tr>
+                  <tr>
+                    <td><code>set_target()</code></td>
+                    <td><code>backend/main.py</code></td>
+                    <td>Clamps target values to configured bounds and marks the machine as moving.</td>
+                  </tr>
+                  <tr>
+                    <td><code>advance_state()</code></td>
+                    <td><code>backend/main.py</code></td>
+                    <td>Main sim tick function. Advances toward target, updates cable lengths, spools, steps, timestamps, and trail.</td>
+                  </tr>
+                  <tr>
+                    <td><code>sim_loop()</code></td>
+                    <td><code>backend/main.py</code></td>
+                    <td>Runs at ~60 Hz and advances the simulation continuously.</td>
+                  </tr>
+                  <tr>
+                    <td><code>push_loop()</code></td>
+                    <td><code>backend/main.py</code></td>
+                    <td>Runs at ~20 Hz and publishes the latest state to all WebSocket subscribers.</td>
+                  </tr>
+                  <tr>
+                    <td><code>square_path()</code>, <code>circle_path()</code></td>
+                    <td><code>backend/planner.py</code></td>
+                    <td>Create sampled waypoint lists used for canned motion demos.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <section class="section" id="frontend">
+            <h2>4. Frontend Architecture</h2>
+            <p>
+              The frontend is a single React application built with Vite. It is intentionally lightweight and renders almost directly from the
+              backend state contract. It now has two top-level tabs: <strong>Simulator</strong> and <strong>Frame Planner</strong>.
+            </p>
+            <div class="cards">
+              <div class="card">
+                <h3>Simulator Tab</h3>
+                <p>Contains the 3D scene, the live controls, the XY map, and telemetry. It is the operator-facing runtime view.</p>
+              </div>
+              <div class="card">
+                <h3>Frame Planner Tab</h3>
+                <p>Provides a design-time UI for entering frame dimensions and seeing derived anchors, bounds, cable lengths, spool turns, and steps.</p>
+              </div>
+            </div>
+
+            <h3 style="margin-top:22px;">Current frontend components</h3>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Component</th>
+                    <th>Purpose</th>
+                    <th>Current behavior</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><code>App.tsx</code></td>
+                    <td>Layout shell</td>
+                    <td>Owns tab state, scene mode, lighting mode, sidebar collapse, sidebar resize, and overall page composition.</td>
+                  </tr>
+                  <tr>
+                    <td><code>useSpiderSocket.ts</code></td>
+                    <td>Transport and command API</td>
+                    <td>Fetches current state, opens WebSocket, polls every 250 ms as fallback, and posts move/path/stop/E-stop commands over HTTP.</td>
+                  </tr>
+                  <tr>
+                    <td><code>SpiderScene.tsx</code></td>
+                    <td>3D visualization</td>
+                    <td>Supports <code>Engineering</code> and <code>Stadium</code> scene modes, top/side/front camera presets, lighting modes, and renders the carriage plus cables and towers.</td>
+                  </tr>
+                  <tr>
+                    <td><code>TopMap.tsx</code></td>
+                    <td>2D XY interaction</td>
+                    <td>Renders the current XY position and lets the user drag the camera marker to issue bounded X/Y moves while holding Z constant.</td>
+                  </tr>
+                  <tr>
+                    <td><code>Controls.tsx</code></td>
+                    <td>Command panel</td>
+                    <td>Provides jog buttons, path buttons, stop, E-stop, and reset E-stop.</td>
+                  </tr>
+                  <tr>
+                    <td><code>Telemetry.tsx</code></td>
+                    <td>State readout</td>
+                    <td>Shows connection status, current XYZ, motion state, and cable lengths A-D.</td>
+                  </tr>
+                  <tr>
+                    <td><code>FramePlanner.tsx</code></td>
+                    <td>Design tool</td>
+                    <td>Calculates anchors, bounds, workspace, cable travel, steps, turns, warnings, and previews for a user-specified frame.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="note">
+              The frontend currently targets <code>http://127.0.0.1:8000</code> and <code>ws://127.0.0.1:8000/ws</code> directly in
+              <code>useSpiderSocket.ts</code>. This is fine for local development, but it should eventually move to environment variables for
+              Raspberry Pi deployment and cross-device access.
+            </div>
+          </section>
+
+          <section class="section" id="state">
+            <h2>5. Runtime State Model</h2>
+            <p>
+              The backend publishes one main state object. The frontend TypeScript shape is defined in <code>frontend/src/types.ts</code>.
+              This schema is effectively the contract between backend and frontend.
+            </p>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Field</th>
+                    <th>Type</th>
+                    <th>Meaning</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td><code>mode</code></td><td>string</td><td>Current machine mode. Today this is simulator-oriented and not yet a full parity state machine.</td></tr>
+                  <tr><td><code>status</code></td><td>string</td><td><code>idle</code>, <code>moving</code>, or <code>stopped</code> in current runtime.</td></tr>
+                  <tr><td><code>estop</code></td><td>boolean</td><td>Emergency-stop latch flag.</td></tr>
+                  <tr><td><code>position</code></td><td><code>{x,y,z}</code></td><td>Current carriage pose in simulator coordinate space.</td></tr>
+                  <tr><td><code>target</code></td><td><code>{x,y,z}</code></td><td>Current active target position.</td></tr>
+                  <tr><td><code>speed</code></td><td>number</td><td>Current move speed in meters per second equivalent.</td></tr>
+                  <tr><td><code>anchors</code></td><td>anchor map</td><td>Anchor coordinates loaded from config and rebroadcast to clients.</td></tr>
+                  <tr><td><code>bounds</code></td><td>XYZ ranges</td><td>Clamped simulator workspace for motion targets.</td></tr>
+                  <tr><td><code>lengths</code></td><td>map</td><td>Current cable lengths for A/B/C/D.</td></tr>
+                  <tr><td><code>steps</code></td><td>map</td><td>Accumulated motor-step deltas per cable.</td></tr>
+                  <tr><td><code>spools</code></td><td>map</td><td>Accumulated spool rotation proxy derived from cable travel.</td></tr>
+                  <tr><td><code>trail</code></td><td>array</td><td>Recent carriage positions used for visual trails.</td></tr>
+                  <tr><td><code>path</code></td><td>object</td><td>Active path name, current index, and sampled points.</td></tr>
+                  <tr><td><code>updated_at</code></td><td>timestamp</td><td>Latest state-write time.</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="warn">
+              The current state model is enough for simulation, but it is not yet the full hardware parity state machine described in
+              <code>docs/HARDWARE_PARITY_PLAN.md</code>. Fields such as <code>controller_ready</code>, <code>faults</code>, and
+              <code>calibration_valid</code> are not yet present.
+            </div>
+          </section>
+
+          <section class="section" id="config">
+            <h2>6. Configuration Model</h2>
+            <p>
+              Configuration is defined in <code>backend/persistent_config.py</code> and persisted to <code>backend/data/spiderpi.yaml</code>.
+              It is already structured for future hardware use even though only part of it is consumed by the current simulation loop.
+            </p>
+            <div class="cards">
+              <div class="card">
+                <h3>FrameConfig</h3>
+                <p>Defines anchor coordinates, workspace bounds, spool radius, and motor steps/rev.</p>
+              </div>
+              <div class="card">
+                <h3>RigConfig</h3>
+                <p>Contains carriage mass, payload mass, gravity, drag coefficient, speed limit, and acceleration limit.</p>
+              </div>
+              <div class="card">
+                <h3>MotorTuning</h3>
+                <p>Electrical and motion-drive values such as current, torque, DRV8825 Vref, microsteps, and step frequency limits.</p>
+              </div>
+              <div class="card">
+                <h3>CalibrationState</h3>
+                <p>Placeholder for homing status, zero lengths, offsets, spool calibration, direction validation, and notes.</p>
+              </div>
+            </div>
+            <div class="note">
+              In the current runtime, the simulator directly uses <code>frame.anchors</code>, <code>frame.bounds</code>,
+              <code>frame.spool_radius_m</code>, <code>frame.motor_steps_per_rev</code>, and <code>motors.microsteps</code>. The rest of the
+              config is modeled but not yet enforced by runtime logic.
+            </div>
+          </section>
+
+          <section class="section" id="planner">
+            <h2>7. Frame Planner UI</h2>
+            <p>
+              The Frame Planner is a non-destructive design calculator. It is meant to help choose physical frame dimensions for a DIY build
+              and immediately see the geometry-driven consequences in terms of anchors, workspace, cable travel, spool turns, and motor steps.
+            </p>
+            <h3 style="margin-top:18px;">Planner inputs</h3>
+            <ul>
+              <li>Frame width and frame length</li>
+              <li>Anchor height</li>
+              <li>X and Y edge margins</li>
+              <li>Minimum and maximum working Z</li>
+              <li>Spool radius</li>
+              <li>Motor steps per revolution</li>
+              <li>Microsteps</li>
+              <li>Carriage mass and payload mass</li>
+              <li>Target max speed and max acceleration</li>
+            </ul>
+            <h3 style="margin-top:18px;">Planner outputs</h3>
+            <ul>
+              <li>Recommended anchors <code>A/B/C/D</code></li>
+              <li>Recommended simulator bounds <code>x/y/z</code></li>
+              <li>Usable workspace dimensions</li>
+              <li>Frame diagonal</li>
+              <li>Steps per meter</li>
+              <li>Turns per meter</li>
+              <li>Cable length range</li>
+              <li>Per-corner cable travel and approximate steps</li>
+              <li>Sample point lengths and worst cable angle</li>
+              <li>Geometry warnings for obviously awkward frame choices</li>
+            </ul>
+            <div class="success">
+              This planner is already valuable for real-world build sizing because it uses the same geometric length formula that the simulator
+              uses for cable calculations.
+            </div>
+            <div class="warn">
+              It is still a planning tool, not a physical feasibility solver. It does not yet calculate tension, sag, torque reserve, or live
+              hardware current limits.
+            </div>
+          </section>
+
+          <section class="section" id="flows">
+            <h2>8. Runtime Flows</h2>
+
+            <h3 style="margin-top:6px;">Flow A: Startup</h3>
+            <ol>
+              <li>Backend loads YAML config.</li>
+              <li>Backend loads or initializes runtime state JSON.</li>
+              <li>Backend starts a shared simulation loop and a shared push loop.</li>
+              <li>Frontend loads.</li>
+              <li>Frontend fetches <code>GET /state</code>.</li>
+              <li>Frontend opens WebSocket <code>/ws</code>.</li>
+              <li>UI renders from the latest state object.</li>
+            </ol>
+
+            <h3 style="margin-top:18px;">Flow B: Point move</h3>
+            <ol>
+              <li>User clicks a jog button or drags the XY map marker.</li>
+              <li>Frontend posts <code>/move</code> with <code>{x, y, z, speed}</code>.</li>
+              <li>Backend clamps target to bounds and marks status <code>moving</code>.</li>
+              <li>Simulation loop advances toward target each tick.</li>
+              <li>Cable lengths, step counts, spool values, and trail update continuously.</li>
+              <li>Frontend re-renders from polling and WebSocket updates.</li>
+            </ol>
+
+            <h3 style="margin-top:18px;">Flow C: Path execution</h3>
+            <ol>
+              <li>User clicks <code>Square</code> or <code>Circle</code>.</li>
+              <li>Backend generates sampled waypoints with <code>planner.py</code>.</li>
+              <li>Current target becomes the first waypoint.</li>
+              <li>When the carriage nears a point, backend advances to the next one.</li>
+              <li>When the list is exhausted, status returns to <code>idle</code>.</li>
+            </ol>
+
+            <h3 style="margin-top:18px;">Flow D: E-stop</h3>
+            <ol>
+              <li>User triggers <code>/estop</code>.</li>
+              <li>Backend sets <code>estop = true</code> and <code>status = stopped</code>.</li>
+              <li>Simulation loop no longer advances state.</li>
+              <li>User must call <code>/reset-estop</code> before motion commands resume normal effect.</li>
+            </ol>
+          </section>
+
+          <section class="section" id="build">
+            <h2>9. Build and Run</h2>
+
+            <h3 style="margin-top:6px;">Backend setup</h3>
+            <div class="command-block">
+              <pre>cd spiderpi-sim-starter/backend
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt</pre>
+            </div>
+
+            <h3 style="margin-top:18px;">Backend run</h3>
+            <div class="command-block">
+              <pre>cd spiderpi-sim-starter/backend
+source .venv/bin/activate
+uvicorn main:app --host 127.0.0.1 --port 8000</pre>
+            </div>
+
+            <h3 style="margin-top:18px;">Frontend setup and run</h3>
+            <div class="command-block">
+              <pre>cd spiderpi-sim-starter/frontend
+npm install
+npm run dev -- --host 127.0.0.1 --port 5173</pre>
+            </div>
+
+            <h3 style="margin-top:18px;">Frontend production build</h3>
+            <div class="command-block">
+              <pre>cd spiderpi-sim-starter/frontend
+npm run build
+npm run preview -- --host 127.0.0.1 --port 4173</pre>
+            </div>
+
+            <h3 style="margin-top:18px;">Backend syntax check</h3>
+            <div class="command-block">
+              <pre>cd spiderpi-sim-starter
+python3 -m py_compile backend/main.py backend/planner.py backend/persistent_config.py</pre>
+            </div>
+          </section>
+
+          <section class="section" id="rpi">
+            <h2>10. Raspberry Pi Deployment Path</h2>
+            <p>
+              The current codebase can already run on a Raspberry Pi as a simulator and UI host. To turn it into a stable Pi-based platform,
+              the first deployment should separate two concerns:
+            </p>
+            <ul>
+              <li><strong>Run the simulator and UI reliably on the Pi</strong></li>
+              <li><strong>Later replace the simulated execution layer with real motor control</strong></li>
+            </ul>
+
+            <h3 style="margin-top:18px;">Recommended Raspberry Pi role</h3>
+            <div class="cards">
+              <div class="card">
+                <h3>Phase 1: Pi as simulator host</h3>
+                <p>Run FastAPI and the frontend on the Pi. Use a browser locally or from another device on the same network to operate the system.</p>
+              </div>
+              <div class="card">
+                <h3>Phase 2: Pi as machine controller</h3>
+                <p>Add hardware controller modules that generate step pulses, read limit switches, and enforce startup safety before live movement.</p>
+              </div>
+            </div>
+
+            <h3 style="margin-top:20px;">Suggested Raspberry Pi software setup</h3>
+            <ol>
+              <li>Install Raspberry Pi OS Lite or Desktop on a Pi 4 or Pi 5.</li>
+              <li>Install Python 3, Node.js, npm, and git.</li>
+              <li>Clone the repository into a writable home directory.</li>
+              <li>Create a Python virtual environment for the backend.</li>
+              <li>Install backend dependencies from <code>requirements.txt</code>.</li>
+              <li>Install frontend dependencies with <code>npm install</code>.</li>
+              <li>Use <code>npm run build</code> and serve static assets, or run the Vite dev server during development.</li>
+            </ol>
+
+            <h3 style="margin-top:18px;">Recommended production arrangement on Pi</h3>
+            <ul>
+              <li>Run the backend as a <code>systemd</code> service under a dedicated user.</li>
+              <li>Serve the frontend as built static files via Nginx, Caddy, or a simple file server.</li>
+              <li>Proxy API and WebSocket traffic from a stable hostname or IP to the backend process.</li>
+              <li>Replace hardcoded <code>127.0.0.1</code> URLs with environment-based configuration before multi-device access.</li>
+            </ul>
+
+            <h3 style="margin-top:18px;">Minimal systemd service concept</h3>
+            <div class="command-block">
+              <pre>[Unit]
+Description=SpiderPi Backend
+After=network.target
+
+[Service]
+WorkingDirectory=/home/pi/spiderpi-sim-starter/backend
+ExecStart=/home/pi/spiderpi-sim-starter/backend/.venv/bin/uvicorn main:app --host 0.0.0.0 --port 8000
+Restart=always
+User=pi
+
+[Install]
+WantedBy=multi-user.target</pre>
+            </div>
+
+            <div class="warn">
+              Before exposing the UI across the network from a Pi, change the frontend transport hook so API and WebSocket URLs come from
+              environment variables or relative paths. The current hardcoded localhost URLs are development-only.
+            </div>
+          </section>
+
+          <section class="section" id="hardware">
+            <h2>11. Future Hardware Integration</h2>
+            <p>
+              The repository is now organized around the idea of future hardware parity, but live hardware control is not implemented yet.
+              The correct next step is not to bolt GPIO calls directly into the current simulation loop. Instead, the runtime should evolve
+              toward the architecture described in <code>docs/HARDWARE_PARITY_PLAN.md</code>.
+            </p>
+            <h3 style="margin-top:18px;">What will be needed before real hardware motion</h3>
+            <ul>
+              <li>Explicit controller modes such as <code>sim</code>, <code>dry_run</code>, and <code>hardware</code></li>
+              <li>A stricter machine state model with readiness, faults, homing, and calibration validity</li>
+              <li>A hardware controller abstraction layer separate from the sim controller</li>
+              <li>Homing routines and limit-switch handling</li>
+              <li>Real step generation for motors and enable/disable control</li>
+              <li>Environment-based endpoint configuration for the frontend</li>
+              <li>Engineering-view-only geometry for debugging live machines</li>
+            </ul>
+
+            <h3 style="margin-top:18px;">Likely Raspberry Pi hardware responsibilities later</h3>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Responsibility</th>
+                    <th>Current status</th>
+                    <th>Future Pi role</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Step pulse generation</td>
+                    <td>Not implemented</td>
+                    <td>Drive A/B/C/D motor channels using GPIO or a dedicated motion driver board.</td>
+                  </tr>
+                  <tr>
+                    <td>Direction and enable control</td>
+                    <td>Only modeled in config</td>
+                    <td>Set DIR and EN pins per corner motor driver.</td>
+                  </tr>
+                  <tr>
+                    <td>Limit switch reads</td>
+                    <td>Only modeled in config</td>
+                    <td>Use GPIO inputs to support homing and travel verification.</td>
+                  </tr>
+                  <tr>
+                    <td>Calibration storage</td>
+                    <td>Modeled in YAML</td>
+                    <td>Persist zero lengths, offsets, and validation results after commissioning.</td>
+                  </tr>
+                  <tr>
+                    <td>Safety interlock</td>
+                    <td>Software E-stop only</td>
+                    <td>Eventually combine software E-stop with physical emergency-stop circuitry.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="danger">
+              Do not interpret the current simulator as ready for unattended live movement on a Raspberry Pi. It can help size the frame and
+              prototype behavior, but it is missing the runtime guarantees and control abstractions required for real motors.
+            </div>
+          </section>
+
+          <section class="section" id="limits">
+            <h2>12. Current Limits and Risks</h2>
+            <ul>
+              <li>The motion model is constant-speed interpolation in XYZ, not a cable-space hardware execution loop.</li>
+              <li>There is no real collision model, no tension model, and no cable sag model.</li>
+              <li>There are no automated tests in the repository.</li>
+              <li>The frontend still uses hardcoded backend URLs.</li>
+              <li>The simulator uses one shared spool radius in runtime math even though future parity work intends to move to per-corner spool modeling.</li>
+              <li>The runtime contract is still simpler than the intended parity state machine.</li>
+              <li>The current E-stop is software-only.</li>
+              <li>The frame planner computes useful geometry and drive conversions, but not physical feasibility under load.</li>
+            </ul>
+            <div class="success">
+              Even with those limits, the project is already useful for four things: simulator interaction, cable-length sanity checks, frame
+              sizing, and preparing the system structure for later Raspberry Pi-based hardware control.
+            </div>
+          </section>
+
+          <div class="footer">
+            Generated for the current SpiderPi Simulator workspace. Recommended companion docs:
+            <code>docs/ARCHITECTURE.md</code> for the shorter summary and <code>docs/HARDWARE_PARITY_PLAN.md</code> for the future control-stack refactor direction.
+          </div>
+        </main>
+      </div>
+    </div>
+  </body>
+</html>

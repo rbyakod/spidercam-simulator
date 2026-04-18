@@ -4,8 +4,10 @@ import { SpiderScene } from "./components/SpiderScene";
 import { Controls } from "./components/Controls";
 import { Telemetry } from "./components/Telemetry";
 import { TopMap } from "./components/TopMap";
+import { FramePlanner } from "./components/FramePlanner";
 
 export default function App() {
+  const [activeTab, setActiveTab] = useState<"simulator" | "planner">("simulator");
   const [sceneMode, setSceneMode] = useState<"engineering" | "stadium">("engineering");
   const [lightingMode, setLightingMode] = useState<"day" | "night">("day");
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
@@ -62,6 +64,22 @@ export default function App() {
           <p>MacBook starter project for React + Three.js + FastAPI</p>
         </div>
         <div className="statusCluster">
+          <div className="viewToggle" aria-label="Application tab">
+            <button
+              className={activeTab === "simulator" ? "active" : ""}
+              onClick={() => setActiveTab("simulator")}
+              type="button"
+            >
+              Simulator
+            </button>
+            <button
+              className={activeTab === "planner" ? "active" : ""}
+              onClick={() => setActiveTab("planner")}
+              type="button"
+            >
+              Frame Planner
+            </button>
+          </div>
           <div className="viewToggle" aria-label="Scene mode">
             <button
               className={sceneMode === "engineering" ? "active" : ""}
@@ -106,24 +124,32 @@ export default function App() {
       </header>
       <main
         ref={layoutRef}
-        className={`layout ${sidebarCollapsed ? "layoutExpanded" : ""} ${isResizing ? "layoutResizing" : ""}`}
+        className={`layout ${activeTab === "planner" ? "layoutPlanner" : ""} ${sidebarCollapsed ? "layoutExpanded" : ""} ${isResizing ? "layoutResizing" : ""}`}
         style={layoutStyle}
       >
-        <section className="left">
-          <SpiderScene state={state} lightingMode={lightingMode} sceneMode={sceneMode} />
-        </section>
-        <section className={`right ${sidebarCollapsed ? "rightCollapsed" : ""}`}>
-          <div
-            className="columnResizer"
-            onPointerDown={handleResizeStart}
-            role="separator"
-            aria-orientation="vertical"
-            aria-label="Resize sidebar"
-          />
-          <Controls state={state} jog={jog} runPath={runPath} stop={stop} estop={estop} resetEstop={resetEstop} />
-          <TopMap state={state} move={move} />
-          <Telemetry state={state} connected={connected} />
-        </section>
+        {activeTab === "simulator" ? (
+          <>
+            <section className="left">
+              <SpiderScene state={state} lightingMode={lightingMode} sceneMode={sceneMode} />
+            </section>
+            <section className={`right ${sidebarCollapsed ? "rightCollapsed" : ""}`}>
+              <div
+                className="columnResizer"
+                onPointerDown={handleResizeStart}
+                role="separator"
+                aria-orientation="vertical"
+                aria-label="Resize sidebar"
+              />
+              <Controls state={state} jog={jog} runPath={runPath} stop={stop} estop={estop} resetEstop={resetEstop} />
+              <TopMap state={state} move={move} />
+              <Telemetry state={state} connected={connected} />
+            </section>
+          </>
+        ) : (
+          <section className="plannerShell">
+            <FramePlanner state={state} />
+          </section>
+        )}
       </main>
     </div>
   );
