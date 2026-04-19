@@ -4,6 +4,10 @@ Local simulator for a Spidercam-style cable robot using FastAPI on the backend a
 
 Detailed architecture notes live in [docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md).
 
+## v15
+
+v15 extracts the backend simulator core into explicit runtime modules for models, machine state, kinematics, workspace validation, runtime storage, executor flow, and controller structure. It also expands the shared simulator state contract with readiness, geometry validity, calibration validity, warnings, faults, and homing status so the frontend can observe a more hardware-oriented engineering state without changing the current motion semantics yet.
+
 ## v14
 
 Before making this simulator real world true engineering simulator with GPIO, physics and math compatibility with real world coordinates - after this all tags indicate changes to the simulator to follow resl world physics/math.

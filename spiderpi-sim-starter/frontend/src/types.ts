@@ -4,6 +4,13 @@ export type SpiderState = {
   mode: string;
   status: string;
   estop: boolean;
+  armed: boolean;
+  controller_ready: boolean;
+  geometry_valid: boolean;
+  calibration_valid: boolean;
+  faults: string[];
+  warnings: string[];
+  homed: Record<string, boolean>;
   position: Vec3;
   target: Vec3;
   speed: number;
