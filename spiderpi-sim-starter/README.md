@@ -70,6 +70,20 @@ npm run dev -- --host 127.0.0.1 --port 5173
 
 Open `http://127.0.0.1:5173`.
 
+### macOS one-shot launcher
+
+Run this from the repository root to open both processes in Terminal:
+
+```bash
+ROOT="/Users/ravibyakod/WORK/SpiderCam/spiderpi-sim-starter"
+osascript \
+  -e 'tell application "Terminal"' \
+  -e "do script \"cd $ROOT/backend && source .venv/bin/activate && uvicorn main:app --reload --host 127.0.0.1 --port 8000\"" \
+  -e "do script \"cd $ROOT/frontend && npm run dev -- --host 127.0.0.1 --port 5173\"" \
+  -e 'activate' \
+  -e 'end tell'
+```
+
 ## Compile / build
 
 ### Backend
