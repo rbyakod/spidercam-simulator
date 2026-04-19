@@ -6,6 +6,7 @@ export type SpiderState = {
   estop: boolean;
   armed: boolean;
   controller_ready: boolean;
+  controller_detail: string | null;
   geometry_valid: boolean;
   workspace_valid: boolean;
   calibration_valid: boolean;
@@ -13,6 +14,11 @@ export type SpiderState = {
   warnings: string[];
   last_error: string | null;
   homed: Record<string, boolean>;
+  limits_verified: boolean;
+  motor_direction_ok: Record<string, boolean>;
+  zero_lengths_m: Record<string, number>;
+  line_offsets_steps: Record<string, number>;
+  controller_trace: string[];
   position: Vec3;
   target: Vec3;
   speed: number;

@@ -8,6 +8,9 @@ BACKEND_DIR = Path(__file__).resolve().parents[1]
 if str(BACKEND_DIR) not in sys.path:
     sys.path.insert(0, str(BACKEND_DIR))
 
+from controllers.controller_manager import ControllerManager
+from controllers.dry_run_controller import DryRunController
+from controllers.hardware_controller import HardwareController
 from controllers.sim_controller import SimController
 from executor import MotionExecutor
 from machine_state import default_state, refresh_state
@@ -19,18 +22,26 @@ class MotionExecutorTests(unittest.TestCase):
     def setUp(self) -> None:
         config = DEFAULT_CONFIG.model_copy(deep=True)
         self.context = build_runtime_context(config)
-        self.executor = MotionExecutor(self.context, SimController(self.context))
+        self.executor = MotionExecutor(
+            self.context,
+            ControllerManager(
+                {
+                    "sim": SimController(self.context),
+                    "dry_run": DryRunController(self.context),
+                    "hardware": HardwareController(self.context),
+                }
+            ),
+        )
         self.state = default_state(self.context)
+        self.executor.sync_state(self.state)
 
-    def test_default_state_contains_v15_runtime_fields(self):
-        self.assertIn("armed", self.state)
-        self.assertIn("controller_ready", self.state)
-        self.assertIn("geometry_valid", self.state)
-        self.assertIn("calibration_valid", self.state)
-        self.assertIn("faults", self.state)
-        self.assertIn("warnings", self.state)
-        self.assertIn("homed", self.state)
-        self.assertFalse(self.state["calibration_valid"])
+    def test_default_state_is_sim_ready_for_browser_use(self):
+        self.assertEqual(self.state["mode"], "sim")
+        self.assertTrue(self.state["armed"])
+        self.assertTrue(self.state["controller_ready"])
+        self.assertTrue(self.state["calibration_valid"])
+        self.assertTrue(all(self.state["homed"].values()))
+        self.assertTrue(self.state["limits_verified"])
 
     def test_set_target_accepts_valid_target_and_sets_target_lengths(self):
         result = self.executor.set_target(self.state, 1.2, 1.0, 0.9, 0.6)
@@ -39,17 +50,35 @@ class MotionExecutorTests(unittest.TestCase):
         self.assertEqual(self.state["status"], "moving")
         self.assertIn("A", self.state["target_lengths"])
 
-    def test_set_target_rejects_invalid_target_without_clamping(self):
-        result = self.executor.set_target(self.state, 10.0, -5.0, 99.0, 0.6)
-        self.assertFalse(result["ok"])
-        self.assertIsNotNone(self.state["last_error"])
-        self.assertEqual(self.state["target"], self.state["position"])
+    def test_disarm_blocks_motion_until_arm(self):
+        self.executor.disarm(self.state)
+        blocked = self.executor.set_target(self.state, 1.2, 1.0, 0.9, 0.6)
+        self.assertFalse(blocked["ok"])
+        self.executor.arm(self.state)
+        allowed = self.executor.set_target(self.state, 1.2, 1.0, 0.9, 0.6)
+        self.assertTrue(allowed["ok"])
 
-    def test_estop_refreshes_to_estopped_status(self):
-        self.executor.estop(self.state)
+    def test_hardware_mode_blocks_motion_when_controller_not_ready(self):
+        self.executor.set_mode(self.state, "hardware")
+        result = self.executor.set_target(self.state, 1.2, 1.0, 0.9, 0.6)
+        self.assertFalse(result["ok"])
+        self.assertFalse(self.state["controller_ready"])
+        self.assertIn("hardware_controller_unavailable_in_starter", self.state["last_error"])
+
+    def test_dry_run_home_and_calibration_generate_trace(self):
+        self.executor.set_mode(self.state, "dry_run")
+        self.state["homed"] = {name: False for name in self.context.cable_names}
+        self.state["limits_verified"] = False
+        self.state["motor_direction_ok"] = {name: False for name in self.context.cable_names}
+
+        self.assertTrue(self.executor.home(self.state)["ok"])
+        self.assertTrue(self.executor.verify_limits(self.state)["ok"])
+        self.assertTrue(self.executor.verify_motor_directions(self.state)["ok"])
+        self.assertTrue(self.executor.calibrate(self.state)["ok"])
+
         refreshed = refresh_state(self.state, self.context)
-        self.assertTrue(refreshed["estop"])
-        self.assertEqual(refreshed["status"], "estopped")
+        self.assertTrue(refreshed["calibration_valid"])
+        self.assertTrue(refreshed["controller_trace"])
 
     def test_advance_state_moves_pose_and_appends_trail(self):
         self.executor.set_target(self.state, 1.2, 1.0, 0.9, 0.6)

@@ -7,6 +7,8 @@ from pydantic import BaseModel
 
 from persistent_config import SystemConfig
 
+SUPPORTED_MODES = ("sim", "dry_run", "hardware")
+
 
 class Target(BaseModel):
     x: float
@@ -23,6 +25,10 @@ class PathCmd(BaseModel):
     z: float = 0.9
 
 
+class ModeCmd(BaseModel):
+    mode: str
+
+
 @dataclass(frozen=True)
 class RuntimeContext:
     config: SystemConfig
@@ -33,6 +39,7 @@ class RuntimeContext:
     microsteps: int
     cable_names: Tuple[str, ...]
     cable_length_limits: Dict[str, Tuple[float, float]]
+    default_mode: str
 
 
 def build_runtime_context(config: SystemConfig) -> RuntimeContext:
@@ -56,6 +63,9 @@ def build_runtime_context(config: SystemConfig) -> RuntimeContext:
             for x, y, z in corners
         ]
         cable_length_limits[name] = (min(lengths), max(lengths))
+    default_mode = str(getattr(config, "controller_mode_default", "sim"))
+    if default_mode not in SUPPORTED_MODES:
+        default_mode = "sim"
     return RuntimeContext(
         config=config,
         anchors=anchors,
@@ -65,4 +75,5 @@ def build_runtime_context(config: SystemConfig) -> RuntimeContext:
         microsteps=int(config.motors.microsteps),
         cable_names=cable_names,
         cable_length_limits=cable_length_limits,
+        default_mode=default_mode,
     )

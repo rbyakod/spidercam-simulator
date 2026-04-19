@@ -14,7 +14,7 @@ export default function App() {
   const [sidebarWidth, setSidebarWidth] = useState(420);
   const [isResizing, setIsResizing] = useState(false);
   const layoutRef = useRef<HTMLElement | null>(null);
-  const { state, connected, jog, move, runPath, stop, estop, resetEstop } = useSpiderSocket();
+  const { state, connected, jog, move, runPath, setMode, arm, disarm, home, verifyLimits, verifyMotorDirections, calibrate, stop, estop, resetEstop } = useSpiderSocket();
 
   useEffect(() => {
     if (!isResizing) return;
@@ -140,7 +140,21 @@ export default function App() {
                 aria-orientation="vertical"
                 aria-label="Resize sidebar"
               />
-              <Controls state={state} jog={jog} runPath={runPath} stop={stop} estop={estop} resetEstop={resetEstop} />
+              <Controls
+                state={state}
+                jog={jog}
+                runPath={runPath}
+                setMode={setMode}
+                arm={arm}
+                disarm={disarm}
+                home={home}
+                verifyLimits={verifyLimits}
+                verifyMotorDirections={verifyMotorDirections}
+                calibrate={calibrate}
+                stop={stop}
+                estop={estop}
+                resetEstop={resetEstop}
+              />
               <TopMap state={state} move={move} />
               <Telemetry state={state} connected={connected} />
             </section>

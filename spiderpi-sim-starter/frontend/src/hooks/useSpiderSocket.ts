@@ -71,12 +71,23 @@ export function useSpiderSocket() {
     void post("/path", { name, ...opts });
   };
 
+  const setMode = (mode: "sim" | "dry_run" | "hardware") => {
+    void post("/mode", { mode });
+  };
+
   return {
     state,
     connected,
     jog,
     move,
     runPath,
+    setMode,
+    arm: () => void post("/arm"),
+    disarm: () => void post("/disarm"),
+    home: () => void post("/home"),
+    verifyLimits: () => void post("/verify-limits"),
+    verifyMotorDirections: () => void post("/verify-motor-directions"),
+    calibrate: () => void post("/calibrate"),
     stop: () => void post("/stop"),
     estop: () => void post("/estop"),
     resetEstop: () => void post("/reset-estop"),

@@ -58,6 +58,7 @@ class SystemConfig(BaseModel):
     frame: FrameConfig = Field(default_factory=FrameConfig)
     rig: RigConfig = Field(default_factory=RigConfig)
     motors: MotorTuning = Field(default_factory=MotorTuning)
+    controller_mode_default: str = "sim"
     gpio_map: Dict[str, MotorPinConfig] = Field(default_factory=lambda: {
         "A": MotorPinConfig(step=12, dir=5, en=6),
         "B": MotorPinConfig(step=13, dir=16, en=6),

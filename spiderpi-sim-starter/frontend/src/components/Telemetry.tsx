@@ -1,16 +1,21 @@
 import { SpiderState } from "../types";
 export function Telemetry({ state, connected }:{ state: SpiderState | null; connected:boolean }) {
   if (!state) return <div className="panel">Loading state...</div>;
+  const lastTrace = state.controller_trace.length ? state.controller_trace[state.controller_trace.length - 1] : "None";
   return <div className="panel">
     <h3>Telemetry</h3>
     <div className="kv"><span>WS</span><span>{connected ? 'Connected' : 'Disconnected'}</span></div>
     <div className="kv"><span>Mode</span><span>{state.mode}</span></div>
     <div className="kv"><span>Status</span><span>{state.status}</span></div>
     <div className="kv"><span>Controller</span><span>{state.controller_ready ? 'Ready' : 'Not Ready'}</span></div>
+    <div className="kv"><span>Controller Detail</span><span>{state.controller_detail ?? "None"}</span></div>
     <div className="kv"><span>Armed</span><span>{state.armed ? 'Yes' : 'No'}</span></div>
     <div className="kv"><span>Geometry</span><span>{state.geometry_valid ? 'Valid' : 'Invalid'}</span></div>
     <div className="kv"><span>Workspace</span><span>{state.workspace_valid ? 'Valid' : 'Invalid'}</span></div>
     <div className="kv"><span>Calibration</span><span>{state.calibration_valid ? 'Valid' : 'Pending'}</span></div>
+    <div className="kv"><span>Homed</span><span>{Object.values(state.homed).every(Boolean) ? 'Yes' : 'No'}</span></div>
+    <div className="kv"><span>Limits</span><span>{state.limits_verified ? 'Verified' : 'Pending'}</span></div>
+    <div className="kv"><span>Directions</span><span>{Object.values(state.motor_direction_ok).every(Boolean) ? 'Verified' : 'Pending'}</span></div>
     <div className="kv"><span>X</span><span>{state.position.x.toFixed(3)} m</span></div>
     <div className="kv"><span>Y</span><span>{state.position.y.toFixed(3)} m</span></div>
     <div className="kv"><span>Z</span><span>{state.position.z.toFixed(3)} m</span></div>
@@ -25,5 +30,6 @@ export function Telemetry({ state, connected }:{ state: SpiderState | null; conn
     <div className="kv"><span>Faults</span><span>{state.faults.length ? state.faults.join(", ") : "None"}</span></div>
     <div className="kv"><span>Warnings</span><span>{state.warnings.length ? state.warnings.join(", ") : "None"}</span></div>
     <div className="kv"><span>Last Error</span><span>{state.last_error ?? "None"}</span></div>
+    <div className="kv"><span>Trace</span><span>{lastTrace}</span></div>
   </div>;
 }

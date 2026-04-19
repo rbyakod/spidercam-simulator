@@ -4,6 +4,10 @@ Local simulator for a Spidercam-style cable robot using FastAPI on the backend a
 
 Detailed architecture notes live in [docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md).
 
+## v17
+
+v17 adds controller modes, readiness gating, homing and calibration workflows, and controller setup visibility. The simulator can now run in `sim`, `dry_run`, or `hardware` mode, normal motion is gated by arming, homing, and calibration readiness, new commands are available for home and verification flows, and the frontend exposes the machine mode, readiness detail, and latest controller trace while keeping the normal local simulator startup commands unchanged.
+
 ## v16
 
 v16 moves the simulator from direct Cartesian stepping to cable-space execution. Targets are now validated against workspace and cable-length constraints before acceptance, the runtime stores target cable lengths explicitly, the simulator derives carriage pose back from cable lengths, and the frontend telemetry shows workspace validity, target cable lengths, and the last target rejection error.

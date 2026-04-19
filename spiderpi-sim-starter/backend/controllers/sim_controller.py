@@ -3,16 +3,12 @@ from __future__ import annotations
 import time
 from typing import Dict
 
+from controllers.base_controller import BaseController
 from kinematics import solve_position_from_lengths, steps_from_delta_length
-from models import RuntimeContext
 
 
-class SimController:
-    def __init__(self, context: RuntimeContext):
-        self.context = context
-
-    def is_ready(self) -> bool:
-        return True
+class SimController(BaseController):
+    mode = "sim"
 
     def apply_lengths(self, state: Dict[str, object], next_lengths: Dict[str, float]) -> None:
         previous_lengths = state["lengths"]
