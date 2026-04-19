@@ -4,6 +4,10 @@ Local simulator for a Spidercam-style cable robot using FastAPI on the backend a
 
 Detailed architecture notes live in [docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md).
 
+## v14
+
+Before making this simulator real world true engineering simulator with GPIO, physics and math compatibility with real world coordinates - after this all tags indicate changes to the simulator to follow resl world physics/math.
+
 ## Repository layout
 
 ```text
