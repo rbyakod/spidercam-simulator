@@ -32,12 +32,18 @@ class MotionExecutorTests(unittest.TestCase):
         self.assertIn("homed", self.state)
         self.assertFalse(self.state["calibration_valid"])
 
-    def test_set_target_clamps_to_bounds_and_marks_moving(self):
-        self.executor.set_target(self.state, 10.0, -5.0, 99.0, 0.6)
-        self.assertEqual(self.state["target"]["x"], self.context.bounds["x"][1])
-        self.assertEqual(self.state["target"]["y"], self.context.bounds["y"][0])
-        self.assertEqual(self.state["target"]["z"], self.context.bounds["z"][1])
+    def test_set_target_accepts_valid_target_and_sets_target_lengths(self):
+        result = self.executor.set_target(self.state, 1.2, 1.0, 0.9, 0.6)
+        self.assertTrue(result["ok"])
+        self.assertAlmostEqual(self.state["target"]["x"], 1.2)
         self.assertEqual(self.state["status"], "moving")
+        self.assertIn("A", self.state["target_lengths"])
+
+    def test_set_target_rejects_invalid_target_without_clamping(self):
+        result = self.executor.set_target(self.state, 10.0, -5.0, 99.0, 0.6)
+        self.assertFalse(result["ok"])
+        self.assertIsNotNone(self.state["last_error"])
+        self.assertEqual(self.state["target"], self.state["position"])
 
     def test_estop_refreshes_to_estopped_status(self):
         self.executor.estop(self.state)
@@ -51,6 +57,7 @@ class MotionExecutorTests(unittest.TestCase):
         self.executor.advance_state(self.state, 1 / 60)
         self.assertGreater(self.state["position"]["x"], before_x)
         self.assertEqual(len(self.state["trail"]), 1)
+        self.assertNotEqual(self.state["lengths"], self.state["target_lengths"])
 
 
 if __name__ == "__main__":

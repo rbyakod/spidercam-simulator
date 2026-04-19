@@ -3,15 +3,16 @@ from __future__ import annotations
 import time
 from typing import Dict, Iterable, List
 
-from kinematics import lengths_from_position
 from models import RuntimeContext
-from workspace import clamp_target, validate_geometry
+from workspace import clamp_target, validate_geometry, validate_position, validate_target
 
 DERIVED_WARNING_KEYS = {
     "calibration_incomplete",
     "homing_incomplete",
     "motor_direction_unverified",
     "limits_unverified",
+    "workspace_invalid",
+    "target_invalid",
 }
 
 
@@ -46,9 +47,29 @@ def _default_position(context: RuntimeContext) -> Dict[str, float]:
     return clamp_target(context, 1.0, 1.0, 0.9)
 
 
+def _normalize_pose(raw_pose: object, default_pose: Dict[str, float]) -> Dict[str, float]:
+    if not isinstance(raw_pose, dict):
+        return dict(default_pose)
+    return {
+        "x": float(raw_pose.get("x", default_pose["x"])),
+        "y": float(raw_pose.get("y", default_pose["y"])),
+        "z": float(raw_pose.get("z", default_pose["z"])),
+    }
+
+
+def _normalize_lengths(raw_lengths: object, default_lengths: Dict[str, float], names: Iterable[str]) -> Dict[str, float]:
+    if not isinstance(raw_lengths, dict):
+        return dict(default_lengths)
+    return {
+        name: float(raw_lengths.get(name, default_lengths[name]))
+        for name in names
+    }
+
+
 def default_state(context: RuntimeContext) -> Dict[str, object]:
     geometry = validate_geometry(context)
     position = _default_position(context)
+    position_validation = validate_position(context, position)
     existing_faults: List[str] = []
     if not geometry["valid"]:
         existing_faults.append("invalid_geometry")
@@ -60,16 +81,19 @@ def default_state(context: RuntimeContext) -> Dict[str, object]:
         "armed": True,
         "controller_ready": bool(geometry["valid"]),
         "geometry_valid": bool(geometry["valid"]),
+        "workspace_valid": bool(position_validation["valid"]),
         "calibration_valid": _calibration_valid(context),
         "faults": existing_faults,
         "warnings": _calibration_warnings(context),
+        "last_error": None,
         "homed": _ordered_bool_map(context.config.calibration.homed, context.cable_names),
         "position": position,
         "target": dict(position),
         "speed": 0.4,
         "anchors": {name: list(coords) for name, coords in context.anchors.items()},
         "bounds": {axis: list(axis_range) for axis, axis_range in context.bounds.items()},
-        "lengths": lengths_from_position(context, position),
+        "lengths": dict(position_validation["lengths"]),
+        "target_lengths": dict(position_validation["lengths"]),
         "steps": {name: 0 for name in context.cable_names},
         "spools": {name: 0.0 for name in context.cable_names},
         "trail": [],
@@ -82,30 +106,18 @@ def default_state(context: RuntimeContext) -> Dict[str, object]:
 def refresh_state(raw_state: Dict[str, object], context: RuntimeContext) -> Dict[str, object]:
     geometry = validate_geometry(context)
     state = dict(raw_state)
+    default_pose = _default_position(context)
 
-    position = state.get("position")
-    if not isinstance(position, dict):
-        position = _default_position(context)
-    position = clamp_target(
-        context,
-        float(position.get("x", 1.0)),
-        float(position.get("y", 1.0)),
-        float(position.get("z", 0.9)),
-    )
-
-    target = state.get("target")
-    if not isinstance(target, dict):
-        target = dict(position)
-    target = clamp_target(
-        context,
-        float(target.get("x", position["x"])),
-        float(target.get("y", position["y"])),
-        float(target.get("z", position["z"])),
-    )
+    position = _normalize_pose(state.get("position"), default_pose)
+    target = _normalize_pose(state.get("target"), position)
+    position_validation = validate_position(context, position)
+    target_validation = validate_target(context, target["x"], target["y"], target["z"])
 
     step_state = state.get("steps") if isinstance(state.get("steps"), dict) else {}
     spool_state = state.get("spools") if isinstance(state.get("spools"), dict) else {}
     path_state = state.get("path") if isinstance(state.get("path"), dict) else {}
+    lengths = _normalize_lengths(state.get("lengths"), position_validation["lengths"], context.cable_names)
+    target_lengths = _normalize_lengths(state.get("target_lengths"), target_validation["lengths"], context.cable_names)
 
     faults = [fault for fault in state.get("faults", []) if fault != "invalid_geometry"]
     if not geometry["valid"]:
@@ -113,6 +125,10 @@ def refresh_state(raw_state: Dict[str, object], context: RuntimeContext) -> Dict
 
     warnings = [warning for warning in state.get("warnings", []) if warning not in DERIVED_WARNING_KEYS]
     warnings.extend(_calibration_warnings(context))
+    if not position_validation["valid"]:
+        warnings.append("workspace_invalid")
+    if not target_validation["valid"]:
+        warnings.append("target_invalid")
 
     normalized = {
         "mode": str(state.get("mode", "sim")),
@@ -121,16 +137,19 @@ def refresh_state(raw_state: Dict[str, object], context: RuntimeContext) -> Dict
         "armed": bool(state.get("armed", True)),
         "controller_ready": bool(state.get("controller_ready", True)) and bool(geometry["valid"]),
         "geometry_valid": bool(geometry["valid"]),
+        "workspace_valid": bool(position_validation["valid"]),
         "calibration_valid": _calibration_valid(context),
         "faults": faults,
         "warnings": warnings,
+        "last_error": state.get("last_error"),
         "homed": _ordered_bool_map(context.config.calibration.homed, context.cable_names),
         "position": position,
         "target": target,
         "speed": float(state.get("speed", 0.4)),
         "anchors": {name: list(coords) for name, coords in context.anchors.items()},
         "bounds": {axis: list(axis_range) for axis, axis_range in context.bounds.items()},
-        "lengths": lengths_from_position(context, position),
+        "lengths": lengths,
+        "target_lengths": target_lengths,
         "steps": {name: int(step_state.get(name, 0)) for name in context.cable_names},
         "spools": {name: float(spool_state.get(name, 0.0)) for name in context.cable_names},
         "trail": list(state.get("trail", []))[-250:],

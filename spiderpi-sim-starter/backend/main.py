@@ -86,21 +86,23 @@ def get_state():
 
 @app.post('/move')
 def move(target: Target):
+    result = {"ok": True}
     def mutate(state):
         executor.clear_path(state)
-        executor.set_target(state, target.x, target.y, target.z, target.speed)
+        result.update(executor.set_target(state, target.x, target.y, target.z, target.speed))
     with_state_lock(mutate)
-    return {"ok": True}
+    return result
 
 @app.post('/path')
 def run_path(cmd: PathCmd):
     pts = resolve_path_points(cmd.name, cmd.size, cmd.radius, cmd.z)
     if not pts:
         return {"ok": False, "error": 'unknown path'}
+    result = {"ok": True}
     def mutate(state):
-        executor.queue_path(state, cmd.name, pts, cmd.speed)
+        result.update(executor.queue_path(state, cmd.name, pts, cmd.speed))
     with_state_lock(mutate)
-    return {"ok": True, "points": len(pts)}
+    return {**result, "points": len(pts)}
 
 @app.post('/stop')
 def stop():

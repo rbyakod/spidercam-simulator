@@ -4,6 +4,10 @@ Local simulator for a Spidercam-style cable robot using FastAPI on the backend a
 
 Detailed architecture notes live in [docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md).
 
+## v16
+
+v16 moves the simulator from direct Cartesian stepping to cable-space execution. Targets are now validated against workspace and cable-length constraints before acceptance, the runtime stores target cable lengths explicitly, the simulator derives carriage pose back from cable lengths, and the frontend telemetry shows workspace validity, target cable lengths, and the last target rejection error.
+
 ## v15
 
 v15 extracts the backend simulator core into explicit runtime modules for models, machine state, kinematics, workspace validation, runtime storage, executor flow, and controller structure. It also expands the shared simulator state contract with readiness, geometry validity, calibration validity, warnings, faults, and homing status so the frontend can observe a more hardware-oriented engineering state without changing the current motion semantics yet.

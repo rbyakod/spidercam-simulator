@@ -32,6 +32,7 @@ class RuntimeContext:
     motor_steps_per_rev: int
     microsteps: int
     cable_names: Tuple[str, ...]
+    cable_length_limits: Dict[str, Tuple[float, float]]
 
 
 def build_runtime_context(config: SystemConfig) -> RuntimeContext:
@@ -44,6 +45,17 @@ def build_runtime_context(config: SystemConfig) -> RuntimeContext:
         for axis, axis_range in config.frame.bounds.items()
     }
     cable_names = tuple(sorted(anchors))
+    x_bounds = bounds["x"]
+    y_bounds = bounds["y"]
+    z_bounds = bounds["z"]
+    corners = [(x, y, z) for x in x_bounds for y in y_bounds for z in z_bounds]
+    cable_length_limits = {}
+    for name, (ax, ay, az) in anchors.items():
+        lengths = [
+            ((x - ax) ** 2 + (y - ay) ** 2 + (z - az) ** 2) ** 0.5
+            for x, y, z in corners
+        ]
+        cable_length_limits[name] = (min(lengths), max(lengths))
     return RuntimeContext(
         config=config,
         anchors=anchors,
@@ -52,4 +64,5 @@ def build_runtime_context(config: SystemConfig) -> RuntimeContext:
         motor_steps_per_rev=int(config.frame.motor_steps_per_rev),
         microsteps=int(config.motors.microsteps),
         cable_names=cable_names,
+        cable_length_limits=cable_length_limits,
     )

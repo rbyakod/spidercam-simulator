@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from typing import Dict, List
 
+from kinematics import lengths_from_xyz
 from models import RuntimeContext
 
 
@@ -37,3 +38,34 @@ def validate_geometry(context: RuntimeContext) -> Dict[str, List[str] | bool]:
         issues.append("invalid_microsteps")
 
     return {"valid": not issues, "issues": issues}
+
+
+def validate_target(context: RuntimeContext, x: float, y: float, z: float) -> Dict[str, object]:
+    errors: List[str] = []
+    geometry = validate_geometry(context)
+    if not geometry["valid"]:
+        errors.extend(str(issue) for issue in geometry["issues"])
+
+    if not (context.bounds["x"][0] <= x <= context.bounds["x"][1]):
+        errors.append("target_out_of_bounds_x")
+    if not (context.bounds["y"][0] <= y <= context.bounds["y"][1]):
+        errors.append("target_out_of_bounds_y")
+    if not (context.bounds["z"][0] <= z <= context.bounds["z"][1]):
+        errors.append("target_out_of_bounds_z")
+
+    lengths = lengths_from_xyz(context.anchors, x, y, z)
+    for name, length in lengths.items():
+        min_length, max_length = context.cable_length_limits[name]
+        if length < min_length - 1e-6 or length > max_length + 1e-6:
+            errors.append(f"cable_length_out_of_range_{name}")
+
+    return {"valid": not errors, "errors": errors, "lengths": lengths}
+
+
+def validate_position(context: RuntimeContext, position: Dict[str, float]) -> Dict[str, object]:
+    return validate_target(
+        context,
+        float(position["x"]),
+        float(position["y"]),
+        float(position["z"]),
+    )

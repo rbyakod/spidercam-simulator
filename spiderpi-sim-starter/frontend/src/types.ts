@@ -7,9 +7,11 @@ export type SpiderState = {
   armed: boolean;
   controller_ready: boolean;
   geometry_valid: boolean;
+  workspace_valid: boolean;
   calibration_valid: boolean;
   faults: string[];
   warnings: string[];
+  last_error: string | null;
   homed: Record<string, boolean>;
   position: Vec3;
   target: Vec3;
@@ -17,6 +19,7 @@ export type SpiderState = {
   anchors: AnchorMap;
   bounds: { x: [number, number]; y: [number, number]; z: [number, number] };
   lengths: Record<string, number>;
+  target_lengths: Record<string, number>;
   steps: Record<string, number>;
   spools: Record<string, number>;
   trail: Vec3[];
