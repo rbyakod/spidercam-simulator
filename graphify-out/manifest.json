@@ -1,0 +1,917 @@
+{
+  ".claude/settings.local.json": {
+    "mtime": 1777995931.7191107,
+    "ast_hash": "898716cc7a65c44c0ea6c2f570254b01",
+    "semantic_hash": ""
+  },
+  "create_spiderpi_sim.sh": {
+    "mtime": 1776417904.4257107,
+    "ast_hash": "65ad283efde0312334a7a721801c2189",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/final/backend/calibration.py": {
+    "mtime": 1776572749.0,
+    "ast_hash": "cb3587fcb5dd2fd84f0b08d0164c91ef",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/final/backend/calibration_gates.py": {
+    "mtime": 1776572749.0,
+    "ast_hash": "66480fcf9c382263129d08ffe1514464",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/final/backend/calibration_state.py": {
+    "mtime": 1776572749.0,
+    "ast_hash": "5001c6e9ca35b7279e0e09448728f840",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/final/backend/config.py": {
+    "mtime": 1776572749.0,
+    "ast_hash": "b6fe47d906e2b0f7dc254153b8462830",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/final/backend/faults.py": {
+    "mtime": 1776572749.0,
+    "ast_hash": "b6dea4a8cba669be348b29dd9e582c8a",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/final/backend/gpio_backend.py": {
+    "mtime": 1776572749.0,
+    "ast_hash": "4bc4e2e709031739db871a4a892879d8",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/final/backend/gpio_map_example.py": {
+    "mtime": 1776572749.0,
+    "ast_hash": "e10f94191585a8d5551436aa97326627",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/final/backend/gpio_runtime.py": {
+    "mtime": 1776572749.0,
+    "ast_hash": "fa9186472b4610216da74eb8ba76c65e",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/final/backend/hardware_executor.py": {
+    "mtime": 1776572749.0,
+    "ast_hash": "f963e8557570ad32535ae7b1827d738e",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/final/backend/hardware_runtime.py": {
+    "mtime": 1776572749.0,
+    "ast_hash": "2cbb13599ec6a5dab3fbe29994d8484f",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/final/backend/homing.py": {
+    "mtime": 1776572749.0,
+    "ast_hash": "3d27db380f4b73f3e00e6234e1123094",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/final/backend/homing_monitor.py": {
+    "mtime": 1776572749.0,
+    "ast_hash": "83dcc60ad2153d7fe09d04ac5efbb90e",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/final/backend/limit_monitor.py": {
+    "mtime": 1776572749.0,
+    "ast_hash": "3921ae7531fa77a13d1e5b5bc4996f7e",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/final/backend/main.py": {
+    "mtime": 1776572749.0,
+    "ast_hash": "d5556a61a92d1de86d289d9c1f61fbf2",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/final/backend/motion_backend.py": {
+    "mtime": 1776572749.0,
+    "ast_hash": "7333a0d93d0c9459b08579fa3a3cb7f5",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/final/backend/motion_profile.py": {
+    "mtime": 1776572749.0,
+    "ast_hash": "235aa69f1b2358788cf58e1fcbcf17e9",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/final/backend/path_store.py": {
+    "mtime": 1776572749.0,
+    "ast_hash": "59fdc631db5ea5d520b74a6b595dc106",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/final/backend/persistent_config.py": {
+    "mtime": 1776572749.0,
+    "ast_hash": "a85d85b0aecaf1e7274efef9da7e8b4b",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/final/backend/physics.py": {
+    "mtime": 1776572749.0,
+    "ast_hash": "c2457326393f5c37b1907e1c9fa0a28e",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/final/backend/planner.py": {
+    "mtime": 1776572749.0,
+    "ast_hash": "18facc9ea83e8a1edb9b44173eccda79",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/final/backend/profile_store.py": {
+    "mtime": 1776572749.0,
+    "ast_hash": "aa2574025a3f85cb4e9dadac1f61463b",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/final/backend/ramped_scheduler.py": {
+    "mtime": 1776572749.0,
+    "ast_hash": "f0ff937f8e6913e845ef0b400e21d9a9",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/final/backend/runtime_factory.py": {
+    "mtime": 1776572749.0,
+    "ast_hash": "0ddd8eea6180e1943c8f9afbb50e5bb8",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/final/backend/safe_motion.py": {
+    "mtime": 1776572749.0,
+    "ast_hash": "c28401d4a2b85faa490c010ab1cb7cbc",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/final/backend/sim_backend.py": {
+    "mtime": 1776572749.0,
+    "ast_hash": "36b4721d59352a909c7af20c2cbcb8c4",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/final/frontend/package.json": {
+    "mtime": 1776572749.0,
+    "ast_hash": "4045db18e401c3d036b5f1cc6c378873",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/final/frontend/src/App.tsx": {
+    "mtime": 1776572749.0,
+    "ast_hash": "feb8ee932e3bb2452d31708de841a3cd",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/final/frontend/src/CalibrationPanel.tsx": {
+    "mtime": 1776572749.0,
+    "ast_hash": "3788a6fd92d3ed6ab458786cc718e5c7",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/final/frontend/src/CalibrationWizard.tsx": {
+    "mtime": 1776572749.0,
+    "ast_hash": "4e82b2b8bd0da75b968d930483c6b803",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/final/frontend/src/Controls.tsx": {
+    "mtime": 1776572749.0,
+    "ast_hash": "a148662fe8933ba3cd6b98e3707b15d6",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/final/frontend/src/FrameSizingPanel.tsx": {
+    "mtime": 1776572749.0,
+    "ast_hash": "3cf8e4edb9c7e35a4a9cd215b5bb8f79",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/final/frontend/src/HardwareGatePanel.tsx": {
+    "mtime": 1776572749.0,
+    "ast_hash": "d213ec4d47640bbc1ea12d00ad53af25",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/final/frontend/src/HomingPanel.tsx": {
+    "mtime": 1776572749.0,
+    "ast_hash": "888e8abdd04497ae4c97835083ca4a82",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/final/frontend/src/Joystick.tsx": {
+    "mtime": 1776572749.0,
+    "ast_hash": "1f8cd42ed4e65c607c20fef5ae954703",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/final/frontend/src/PhysicsPanel.tsx": {
+    "mtime": 1776572749.0,
+    "ast_hash": "2e5252aca4b563425c35a4e54d5758ca",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/final/frontend/src/ProfileManager.tsx": {
+    "mtime": 1776572749.0,
+    "ast_hash": "53e8b4ef25cc4eefd28c39b0048a67be",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/final/frontend/src/ProfileSelector.tsx": {
+    "mtime": 1776572749.0,
+    "ast_hash": "30eeacd914c9db819e7749e3fa2d532f",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/final/frontend/src/SpiderScene.tsx": {
+    "mtime": 1776572749.0,
+    "ast_hash": "73ee3c8a252195bbcf1332bc244e8b1a",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/final/frontend/src/SpoolWidget.tsx": {
+    "mtime": 1776572749.0,
+    "ast_hash": "d319f32c985d78a264fe832af993bdf7",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/final/frontend/src/Telemetry.tsx": {
+    "mtime": 1776572749.0,
+    "ast_hash": "b5bdbdce5bdfe5a369b8eda6743c28af",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/final/frontend/src/TopMap.tsx": {
+    "mtime": 1776572749.0,
+    "ast_hash": "b3ab77d544d43e794b5c77ab3ae0c264",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/final/frontend/src/frameSizing.ts": {
+    "mtime": 1776572749.0,
+    "ast_hash": "1212046fec076d370086c8d74af7b375",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/final/frontend/src/kinematics.ts": {
+    "mtime": 1776572749.0,
+    "ast_hash": "6407934f5f13296014634077058fa238",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/final/frontend/src/main.tsx": {
+    "mtime": 1776572749.0,
+    "ast_hash": "afe2a76cc2def68ece59e73aa20c6d60",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/final/frontend/src/types.ts": {
+    "mtime": 1776572749.0,
+    "ast_hash": "3915b507f7b7cf9c676db26fced9cf5b",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/final/frontend/src/useSpiderSocket.ts": {
+    "mtime": 1776572749.0,
+    "ast_hash": "a9088b4b1571a4a1d2853dfe1803f807",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/final/frontend/tsconfig.json": {
+    "mtime": 1776572749.0,
+    "ast_hash": "0ae30e40e3c5158b36aa279e47ca6e8c",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/final/frontend/vite.config.ts": {
+    "mtime": 1776572749.0,
+    "ast_hash": "f5aac0656b789c6ed62ff74ca997ef9e",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/from-cowork-original/backend/calibration.py": {
+    "mtime": 1776539939.0,
+    "ast_hash": "2f6c42e0c33655edf966788093203b56",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/from-cowork-original/backend/calibration_gates.py": {
+    "mtime": 1776539939.0,
+    "ast_hash": "7d6ca82a75bfaed0cc988c0e562abd8a",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/from-cowork-original/backend/calibration_state.py": {
+    "mtime": 1776539939.0,
+    "ast_hash": "5f970275f34447a5dee01a86366e2715",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/from-cowork-original/backend/config.py": {
+    "mtime": 1776539939.0,
+    "ast_hash": "99cf007963483759ac9b2049f4c2d7a0",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/from-cowork-original/backend/faults.py": {
+    "mtime": 1776539939.0,
+    "ast_hash": "5508a0305133f681e368e0d6d35deef5",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/from-cowork-original/backend/gpio_backend.py": {
+    "mtime": 1776539939.0,
+    "ast_hash": "7cc24abe2f9a234b13a8e664acac8014",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/from-cowork-original/backend/gpio_map_example.py": {
+    "mtime": 1776539939.0,
+    "ast_hash": "01bf582ee2a1acf6a658c5673813dece",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/from-cowork-original/backend/gpio_runtime.py": {
+    "mtime": 1776539939.0,
+    "ast_hash": "e3ca1d7fe15922cd35a883bb85af069f",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/from-cowork-original/backend/hardware_executor.py": {
+    "mtime": 1776539939.0,
+    "ast_hash": "8b2be04e5e489e10865415e85c5cbcf3",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/from-cowork-original/backend/hardware_runtime.py": {
+    "mtime": 1776539939.0,
+    "ast_hash": "978bd3a4d35d67881d78a0f17f5874cf",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/from-cowork-original/backend/homing.py": {
+    "mtime": 1776539939.0,
+    "ast_hash": "1d48187a88c33c46fd666e60c8bfedd8",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/from-cowork-original/backend/homing_monitor.py": {
+    "mtime": 1776539939.0,
+    "ast_hash": "e1c3a1c42e4083f3862cb2cfbdc56963",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/from-cowork-original/backend/limit_monitor.py": {
+    "mtime": 1776539939.0,
+    "ast_hash": "39c47a5e4d5176e5c584005d2a491532",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/from-cowork-original/backend/main.py": {
+    "mtime": 1776539939.0,
+    "ast_hash": "e0b8dd0a9a39c2d84fbd6c9da6bb08fd",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/from-cowork-original/backend/motion_backend.py": {
+    "mtime": 1776539939.0,
+    "ast_hash": "2718a2e15b8ab96b8ba47eb37b8a5189",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/from-cowork-original/backend/motion_profile.py": {
+    "mtime": 1776539939.0,
+    "ast_hash": "9527cdaab443a2babba39a1c41b9803b",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/from-cowork-original/backend/path_store.py": {
+    "mtime": 1776539939.0,
+    "ast_hash": "e9e62c26838e4f2de3341e447bfb9341",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/from-cowork-original/backend/persistent_config.py": {
+    "mtime": 1776539939.0,
+    "ast_hash": "daba7171be7e92f624a754a619296c29",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/from-cowork-original/backend/physics.py": {
+    "mtime": 1776539939.0,
+    "ast_hash": "75dd3b1eb9c6cb7d49e062aeced2cd97",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/from-cowork-original/backend/planner.py": {
+    "mtime": 1776539939.0,
+    "ast_hash": "abd0d86a7592da4ae44eacf8756f88c2",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/from-cowork-original/backend/profile_store.py": {
+    "mtime": 1776539939.0,
+    "ast_hash": "bd74466963729421122fb6f04c37239e",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/from-cowork-original/backend/ramped_scheduler.py": {
+    "mtime": 1776539939.0,
+    "ast_hash": "7cbf2851e87610257cdbdf1eed607038",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/from-cowork-original/backend/runtime_factory.py": {
+    "mtime": 1776539939.0,
+    "ast_hash": "e82adac6c72d033ab99b8e29f35990b3",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/from-cowork-original/backend/safe_motion.py": {
+    "mtime": 1776539939.0,
+    "ast_hash": "f2e61689a31647037772c578cf5e924f",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/from-cowork-original/backend/sim_backend.py": {
+    "mtime": 1776539939.0,
+    "ast_hash": "c4402df33abf79771fcd56de9630e9bb",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/from-cowork-original/frontend/package.json": {
+    "mtime": 1776539939.0,
+    "ast_hash": "c19b9db6f466862d05f52b67c8027310",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/from-cowork-original/frontend/src/App.tsx": {
+    "mtime": 1776539939.0,
+    "ast_hash": "94142c072915fa90538a6cc0ac70facc",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/from-cowork-original/frontend/src/components/CalibrationPanel.tsx": {
+    "mtime": 1776539939.0,
+    "ast_hash": "71498697a220ce05e7e876d1cf8afafd",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/from-cowork-original/frontend/src/components/CalibrationWizard.tsx": {
+    "mtime": 1776539939.0,
+    "ast_hash": "61a23b22f6823ce178505d5473c2a5f2",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/from-cowork-original/frontend/src/components/Controls.tsx": {
+    "mtime": 1776539939.0,
+    "ast_hash": "f8e001eb176d0cd54e556b05a2558398",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/from-cowork-original/frontend/src/components/FrameSizingPanel.tsx": {
+    "mtime": 1776539939.0,
+    "ast_hash": "352239d04e0032966cea1ada136371ef",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/from-cowork-original/frontend/src/components/HardwareGatePanel.tsx": {
+    "mtime": 1776539939.0,
+    "ast_hash": "022c8a91de048b8c3e193da90bf5379b",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/from-cowork-original/frontend/src/components/HomingPanel.tsx": {
+    "mtime": 1776539939.0,
+    "ast_hash": "6f82b02531abbbc22965dd5a37b7112e",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/from-cowork-original/frontend/src/components/Joystick.tsx": {
+    "mtime": 1776539939.0,
+    "ast_hash": "ed430685c0cc48e1fc8319683cd69500",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/from-cowork-original/frontend/src/components/PhysicsPanel.tsx": {
+    "mtime": 1776539939.0,
+    "ast_hash": "7541efea52422cae0643a56d61f922f1",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/from-cowork-original/frontend/src/components/ProfileManager.tsx": {
+    "mtime": 1776539939.0,
+    "ast_hash": "83ab85c15e3f11705b8096feee7bf963",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/from-cowork-original/frontend/src/components/ProfileSelector.tsx": {
+    "mtime": 1776539939.0,
+    "ast_hash": "571efe0ba46c44b6a55487193289b9ad",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/from-cowork-original/frontend/src/components/SpiderScene.tsx": {
+    "mtime": 1776539939.0,
+    "ast_hash": "e96cc09f9cadccf1fbe8635b96c66668",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/from-cowork-original/frontend/src/components/SpoolWidget.tsx": {
+    "mtime": 1776539939.0,
+    "ast_hash": "b7c48f788052aaa045f2474f24f25831",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/from-cowork-original/frontend/src/components/Telemetry.tsx": {
+    "mtime": 1776539939.0,
+    "ast_hash": "f2d68909d00798d3710acd83d0a4231d",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/from-cowork-original/frontend/src/components/TopMap.tsx": {
+    "mtime": 1776539939.0,
+    "ast_hash": "17046723d23fba2c48a5f251e18a5a4e",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/from-cowork-original/frontend/src/hooks/useSpiderSocket.ts": {
+    "mtime": 1776539939.0,
+    "ast_hash": "6eabad80d4a9d75bfda6937641753ec2",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/from-cowork-original/frontend/src/lib/frameSizing.ts": {
+    "mtime": 1776539939.0,
+    "ast_hash": "61942bac99676b0983c3211f54ee5399",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/from-cowork-original/frontend/src/lib/kinematics.ts": {
+    "mtime": 1776539939.0,
+    "ast_hash": "4b6dc6421f909e12b4793b719dba5719",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/from-cowork-original/frontend/src/main.tsx": {
+    "mtime": 1776539939.0,
+    "ast_hash": "fc1cfacc070f64e7380401cae205e22d",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/from-cowork-original/frontend/src/types.ts": {
+    "mtime": 1776539939.0,
+    "ast_hash": "3ec9d808d5dfb1e7bab7e3c00019001b",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/from-cowork-original/frontend/tsconfig.json": {
+    "mtime": 1776539939.0,
+    "ast_hash": "9768fdbdf19cd020086abf5fd06f615d",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/from-cowork-original/frontend/vite.config.ts": {
+    "mtime": 1776539939.0,
+    "ast_hash": "5ee7c394e2d351a0eb44626579450f95",
+    "semantic_hash": ""
+  },
+  "spiderpi-sim-starter/backend/controllers/__init__.py": {
+    "mtime": 1776577002.1641953,
+    "ast_hash": "81cdb0409e51325d2fd52726c24bc802",
+    "semantic_hash": ""
+  },
+  "spiderpi-sim-starter/backend/controllers/base_controller.py": {
+    "mtime": 1776579316.0040402,
+    "ast_hash": "48d8acaf015eb86851a1fe7c2d1c5124",
+    "semantic_hash": ""
+  },
+  "spiderpi-sim-starter/backend/controllers/controller_manager.py": {
+    "mtime": 1776579316.202682,
+    "ast_hash": "30e284a8383ae91a7d03e314af87f186",
+    "semantic_hash": ""
+  },
+  "spiderpi-sim-starter/backend/controllers/dry_run_controller.py": {
+    "mtime": 1776579316.047121,
+    "ast_hash": "3d926388d86d6d090361385844fbebfe",
+    "semantic_hash": ""
+  },
+  "spiderpi-sim-starter/backend/controllers/hardware_controller.py": {
+    "mtime": 1776579316.133947,
+    "ast_hash": "dcb2b20ff972a95f159ebc840314b5eb",
+    "semantic_hash": ""
+  },
+  "spiderpi-sim-starter/backend/controllers/sim_controller.py": {
+    "mtime": 1776579325.2526996,
+    "ast_hash": "fe1f79149dac52111a0272bca0c27ede",
+    "semantic_hash": ""
+  },
+  "spiderpi-sim-starter/backend/executor.py": {
+    "mtime": 1776579434.3216012,
+    "ast_hash": "84bfa858d580124c38e089b4ce311950",
+    "semantic_hash": ""
+  },
+  "spiderpi-sim-starter/backend/kinematics.py": {
+    "mtime": 1776577766.867202,
+    "ast_hash": "b347338b6fd66532cbd8f7bf3ccfd8b5",
+    "semantic_hash": ""
+  },
+  "spiderpi-sim-starter/backend/machine_state.py": {
+    "mtime": 1776579649.9883015,
+    "ast_hash": "43ba8f2429ff806246896f1c5a1819f9",
+    "semantic_hash": ""
+  },
+  "spiderpi-sim-starter/backend/main.py": {
+    "mtime": 1776579478.9336262,
+    "ast_hash": "15db93efea7d7d995d4385d20a87d2ea",
+    "semantic_hash": ""
+  },
+  "spiderpi-sim-starter/backend/models.py": {
+    "mtime": 1776579283.6717677,
+    "ast_hash": "22989723d1730eff2ddf2df6b63136e5",
+    "semantic_hash": ""
+  },
+  "spiderpi-sim-starter/backend/persistent_config.py": {
+    "mtime": 1776579272.9229016,
+    "ast_hash": "0242e712ad0adb6f7fdc26da56611817",
+    "semantic_hash": ""
+  },
+  "spiderpi-sim-starter/backend/planner.py": {
+    "mtime": 1776397318.0,
+    "ast_hash": "7fa426093ce6f2aeb824c5ca6cd117e4",
+    "semantic_hash": ""
+  },
+  "spiderpi-sim-starter/backend/runtime_store.py": {
+    "mtime": 1776577002.1046247,
+    "ast_hash": "0682eba175609710fd81b1ea1a6a6876",
+    "semantic_hash": ""
+  },
+  "spiderpi-sim-starter/backend/tests/test_executor.py": {
+    "mtime": 1776579611.4316225,
+    "ast_hash": "e063eb5d580695fe61629b051d91ca00",
+    "semantic_hash": ""
+  },
+  "spiderpi-sim-starter/backend/tests/test_kinematics.py": {
+    "mtime": 1776577933.8207688,
+    "ast_hash": "a03f7bbc76339eb83cef973c80cf3c43",
+    "semantic_hash": ""
+  },
+  "spiderpi-sim-starter/backend/workspace.py": {
+    "mtime": 1776577766.9344373,
+    "ast_hash": "b619ed65f06fe5c3badb5fba65a51ad3",
+    "semantic_hash": ""
+  },
+  "spiderpi-sim-starter/frontend/package.json": {
+    "mtime": 1776418500.479285,
+    "ast_hash": "00616f974e85071e93bba3cacbfac632",
+    "semantic_hash": ""
+  },
+  "spiderpi-sim-starter/frontend/src/App.tsx": {
+    "mtime": 1776579527.337112,
+    "ast_hash": "bc345356716134e7653e73b26b4414b0",
+    "semantic_hash": ""
+  },
+  "spiderpi-sim-starter/frontend/src/components/Controls.tsx": {
+    "mtime": 1776579519.6100996,
+    "ast_hash": "730169588ba1c209003c15134b8f0ed5",
+    "semantic_hash": ""
+  },
+  "spiderpi-sim-starter/frontend/src/components/FramePlanner.tsx": {
+    "mtime": 1776499186.1279237,
+    "ast_hash": "a565caf4e055d2e761026a2bfcc0314a",
+    "semantic_hash": ""
+  },
+  "spiderpi-sim-starter/frontend/src/components/SpiderScene.tsx": {
+    "mtime": 1776437222.1200776,
+    "ast_hash": "d3046c1ae25f0d97d9c175efc573a1fa",
+    "semantic_hash": ""
+  },
+  "spiderpi-sim-starter/frontend/src/components/Telemetry.tsx": {
+    "mtime": 1776579562.0697703,
+    "ast_hash": "3a38c39eb9318a7ee4ffb6f173aa64c7",
+    "semantic_hash": ""
+  },
+  "spiderpi-sim-starter/frontend/src/components/TopMap.tsx": {
+    "mtime": 1776487097.2478206,
+    "ast_hash": "a4f98bef47ae2af549b68f7949402d4a",
+    "semantic_hash": ""
+  },
+  "spiderpi-sim-starter/frontend/src/hooks/useSpiderSocket.ts": {
+    "mtime": 1776579496.0874,
+    "ast_hash": "450c78180b5269c654a564e78f0a840d",
+    "semantic_hash": ""
+  },
+  "spiderpi-sim-starter/frontend/src/main.tsx": {
+    "mtime": 1776397318.0,
+    "ast_hash": "bb7450cdc699ab3c4db8ba26551537a4",
+    "semantic_hash": ""
+  },
+  "spiderpi-sim-starter/frontend/src/types.ts": {
+    "mtime": 1776579487.3658812,
+    "ast_hash": "ff8c15f3bc08dab7d4dd330857f77239",
+    "semantic_hash": ""
+  },
+  "spiderpi-sim-starter/frontend/tsconfig.json": {
+    "mtime": 1776397318.0,
+    "ast_hash": "56a88ab875f81c31be46b864df030853",
+    "semantic_hash": ""
+  },
+  "spiderpi-sim-starter/frontend/vite.config.ts": {
+    "mtime": 1776397318.0,
+    "ast_hash": "42f04eb037a3058cc84002517ce9510d",
+    "semantic_hash": ""
+  },
+  "CLAUDE.md": {
+    "mtime": 1776418412.7194595,
+    "ast_hash": "575b4e06b6a7009b258e665d483e2c09",
+    "semantic_hash": ""
+  },
+  "README.md": {
+    "mtime": 1776573056.351579,
+    "ast_hash": "1af5122057045f0e5714c3313bb9a372",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/final/BUILD_GUIDE.md": {
+    "mtime": 1776572749.0,
+    "ast_hash": "fafab05fa4a412fc9312d00ce955cb83",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/final/CAD_DRAWINGS_READY.md": {
+    "mtime": 1776572749.0,
+    "ast_hash": "53f28211d1e20e0869de561d37fdf93a",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/final/CALIBRATION_CHECKLIST.md": {
+    "mtime": 1776572749.0,
+    "ast_hash": "a7023cdc53b7de953c3cab42ba934359",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/final/HARDWARE_GATE_INTEGRATION.md": {
+    "mtime": 1776572749.0,
+    "ast_hash": "c3f2fd085f2520ec3386a8e2d71b769f",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/final/MANUFACTURING_RELEASE_CHECKLIST.md": {
+    "mtime": 1776572749.0,
+    "ast_hash": "648994fb3e29df4c8acc9bce9c3b14df",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/final/MECHANICAL_DRAWINGS.md": {
+    "mtime": 1776572749.0,
+    "ast_hash": "c66f4e85963e83945f70e4cfe88b83df",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/final/README.md": {
+    "mtime": 1776572749.0,
+    "ast_hash": "9fc35a1a4402d34d20441379149f389b",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/final/REAL_HARDWARE_BRINGUP.md": {
+    "mtime": 1776572749.0,
+    "ast_hash": "be0bbf3ef259b87c562e62d6d10be39c",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/final/RUNBOOK.md": {
+    "mtime": 1776572749.0,
+    "ast_hash": "a6d80e5a52557602a9ddd9ac030df1bf",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/final/SPOOL_DESIGN_SPEC.md": {
+    "mtime": 1776572749.0,
+    "ast_hash": "c93a788013d21d92c84b31ea1508545e",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/final/WIRING_TABLE.md": {
+    "mtime": 1776572749.0,
+    "ast_hash": "f8ee6e5165baa77fb2666da0ec42c9b5",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/final/backend/requirements.txt": {
+    "mtime": 1776572749.0,
+    "ast_hash": "3cc4ccbedfcdfaef9328f7797e65abce",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/final/bom/BOM_REGIONAL.md": {
+    "mtime": 1776572749.0,
+    "ast_hash": "179ebd3eb5f7c462f41376991b46833f",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/final/data/calibration_wizard.yaml": {
+    "mtime": 1776572749.0,
+    "ast_hash": "79643425930c6375bbed33ec4b02ab18",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/final/data/path_presets.yaml": {
+    "mtime": 1776572749.0,
+    "ast_hash": "9e632cdc7e85544a557be26a989c2bbb",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/final/data/spiderpi.yaml": {
+    "mtime": 1776572749.0,
+    "ast_hash": "d19fd80454e700e09e14c7b554bfd064",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/final/docker-compose.yml": {
+    "mtime": 1776572749.0,
+    "ast_hash": "ee962c3d2e2cc966fd8c5392172d9848",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/final/docs/hardware/TEST_SEQUENCES_MULTI_AXIS.md": {
+    "mtime": 1776572749.0,
+    "ast_hash": "6e3fd33760e7241f804236919a1e14f7",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/final/docs/hardware/TROUBLESHOOTING_CALIBRATION.md": {
+    "mtime": 1776572749.0,
+    "ast_hash": "62a11efd3b5271e455f2903ccf29d461",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/final/docs/hardware/WIRING_DIAGRAM_DESKTOP_1M.md": {
+    "mtime": 1776572749.0,
+    "ast_hash": "0b02a11edb0f082c622a8c6ccb20e520",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/final/frontend/index.html": {
+    "mtime": 1776572749.0,
+    "ast_hash": "aea83a155a2987d85c973026a50835ff",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/final/profiles/machine_profiles.yaml": {
+    "mtime": 1776572749.0,
+    "ast_hash": "ad19538369eed8e78a01846d9d949d48",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/from-cowork-original/BUILD_GUIDE.md": {
+    "mtime": 1776539939.0,
+    "ast_hash": "af6496c846b6969662a401c614dc21a7",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/from-cowork-original/CAD_DRAWINGS_READY.md": {
+    "mtime": 1776539939.0,
+    "ast_hash": "2202c07e78be267f8543fb8942e01373",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/from-cowork-original/CALIBRATION_CHECKLIST.md": {
+    "mtime": 1776539939.0,
+    "ast_hash": "c87121075ac564d5faaea08ab7f2a6c8",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/from-cowork-original/HARDWARE_GATE_INTEGRATION.md": {
+    "mtime": 1776539939.0,
+    "ast_hash": "89d4bc8943e098e8c5115fa28bf1571e",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/from-cowork-original/MANUFACTURING_RELEASE_CHECKLIST.md": {
+    "mtime": 1776539939.0,
+    "ast_hash": "4f8fa3b47880356454ae1a648f7708a4",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/from-cowork-original/MECHANICAL_DRAWINGS.md": {
+    "mtime": 1776539939.0,
+    "ast_hash": "57d25f94251b57e0618236f382be3a0b",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/from-cowork-original/README.md": {
+    "mtime": 1776539939.0,
+    "ast_hash": "44dc9be3ce9e6b9dafdd61deb5024be5",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/from-cowork-original/REAL_HARDWARE_BRINGUP.md": {
+    "mtime": 1776539939.0,
+    "ast_hash": "2990bf7a2ab95fc90abbcf5e8d2067bc",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/from-cowork-original/RUNBOOK.md": {
+    "mtime": 1776539939.0,
+    "ast_hash": "2d5535ef428c2666a91a95f40d514a82",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/from-cowork-original/SPOOL_DESIGN_SPEC.md": {
+    "mtime": 1776539939.0,
+    "ast_hash": "9bfe6408da55e299da4eac2a68043ab7",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/from-cowork-original/WIRING_TABLE.md": {
+    "mtime": 1776539939.0,
+    "ast_hash": "ff029d9e5f3fba96ca3529f91d9c0a3c",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/from-cowork-original/backend/requirements.txt": {
+    "mtime": 1776539939.0,
+    "ast_hash": "d3bb41f4b06f8a82cc18da8bfcc1690b",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/from-cowork-original/bom/BOM_REGIONAL.md": {
+    "mtime": 1776539939.0,
+    "ast_hash": "deb6bd78c293b9564bdddae2c1a8f7ab",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/from-cowork-original/data/calibration_wizard.yaml": {
+    "mtime": 1776539939.0,
+    "ast_hash": "ce24455f591736dc2e1c6bea70cad762",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/from-cowork-original/data/path_presets.yaml": {
+    "mtime": 1776539939.0,
+    "ast_hash": "6bb76bd667af186f6ae6f5d3fce2aa53",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/from-cowork-original/data/spiderpi.yaml": {
+    "mtime": 1776539939.0,
+    "ast_hash": "a693b15002d274bfb792a6e5b1ee71f8",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/from-cowork-original/docker-compose.yml": {
+    "mtime": 1776539939.0,
+    "ast_hash": "04657bf151a33e48973543dfbd51b595",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/from-cowork-original/docs/hardware/TEST_SEQUENCES_MULTI_AXIS.md": {
+    "mtime": 1776539939.0,
+    "ast_hash": "946dca5dc6cc887995168a01578932e7",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/from-cowork-original/docs/hardware/TROUBLESHOOTING_CALIBRATION.md": {
+    "mtime": 1776539939.0,
+    "ast_hash": "f2d1f1b2b665e619c0fbde72323f26c1",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/from-cowork-original/docs/hardware/WIRING_DIAGRAM_DESKTOP_1M.md": {
+    "mtime": 1776539939.0,
+    "ast_hash": "7a76efc1a8c9b8e9a6fd8486e529701d",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/from-cowork-original/frontend/index.html": {
+    "mtime": 1776539939.0,
+    "ast_hash": "f7d4c8b683a6a7fe16510c57870266b6",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/from-cowork-original/profiles/machine_profiles.yaml": {
+    "mtime": 1776539939.0,
+    "ast_hash": "a4a34f589ebc7475a4eaa9bd4cc77806",
+    "semantic_hash": ""
+  },
+  "docs/perplexity-design/perplexity-chat-content.txt": {
+    "mtime": 1776535676.0,
+    "ast_hash": "1ac87ffd03925efa6df223f917a61acf",
+    "semantic_hash": ""
+  },
+  "index.html": {
+    "mtime": 1776417929.9694562,
+    "ast_hash": "fe4633add544a82d9eb5eff8e3dd0347",
+    "semantic_hash": ""
+  },
+  "spiderpi-sim-starter/README.md": {
+    "mtime": 1776598956.237854,
+    "ast_hash": "8e5603755dd4356c186ee6c13fd331d4",
+    "semantic_hash": ""
+  },
+  "spiderpi-sim-starter/backend/data/spiderpi.yaml": {
+    "mtime": 1776418427.9023733,
+    "ast_hash": "3ea00a4dda387cfbb4e4b69add832ab5",
+    "semantic_hash": ""
+  },
+  "spiderpi-sim-starter/backend/requirements.txt": {
+    "mtime": 1776397318.0,
+    "ast_hash": "d3bb41f4b06f8a82cc18da8bfcc1690b",
+    "semantic_hash": ""
+  },
+  "spiderpi-sim-starter/docs/ARCHITECTURE.md": {
+    "mtime": 1776418272.0538058,
+    "ast_hash": "c2bfa8074a4c6de7c740a3df2d5cb610",
+    "semantic_hash": ""
+  },
+  "spiderpi-sim-starter/docs/ARCHITECTURE_DETAILED.html": {
+    "mtime": 1776531546.007233,
+    "ast_hash": "cef757a1fb4e9a7767bcbdf9cf50f643",
+    "semantic_hash": ""
+  },
+  "spiderpi-sim-starter/docs/HARDWARE_PARITY_PLAN.md": {
+    "mtime": 1776437222.0988355,
+    "ast_hash": "70330c6727140ba519811ca9242d7f91",
+    "semantic_hash": ""
+  },
+  "spiderpi-sim-starter/frontend/index.html": {
+    "mtime": 1776397318.0,
+    "ast_hash": "fe4633add544a82d9eb5eff8e3dd0347",
+    "semantic_hash": ""
+  },
+  "spiderpi-sim-starter/frontend/public/spidercam-reference.png": {
+    "mtime": 1776418909.6830266,
+    "ast_hash": "fdb9f089a600650ec4806e2706ee9a32",
+    "semantic_hash": ""
+  }
+}
