@@ -1,0 +1,16 @@
+Category,Item,Qty,Price_USD,Notes,Source
+Controller,Raspberry Pi 4B 4GB,1,55.00,Main compute + GPIO,CanaKit / PiShop.us
+Motor,NEMA 17 Stepper 1.7A (17HS4401),4,11.00 each,Use identical motors,Amazon / Pololu
+Driver,DRV8825 Stepper Driver (Pololu),5,15.59 each (or $4.57 compatible),Buy one spare,Pololu / Amazon
+Camera,Raspberry Pi Camera Module 3,1,29.25,Official camera,PiShop.us
+Cable,Dyneema/Spectra Braided Line 0.8mm,2 spools,12.00 each,Low-stretch fishing line braid,Amazon
+Frame,2020 V-slot Aluminum Extrusion 1m,8,3.60/m,Main frame,RobotDigg / Openbuilds
+Safety,Micro limit switch (NO+NC),4,1.50 each,Use NC wiring,Amazon
+Safety,Emergency stop button 22mm,1,8.00,Red mushroom head,Amazon
+Power,12V 5A switching PSU,1,18.00,Dedicated motor rail,Amazon
+Mechanics,Spool + bearing kit,1 set,25.00,3D printed spools + 608 bearings,Local 3D print
+Mounting,M3/M5 bolts + T-nuts + brackets,1 set,15.00,Hardware for frame assembly,Amazon / local
+Wiring,Dupont wires + JST connectors,1 set,10.00,Signal and power wiring,Amazon
+Misc,MicroSD 32GB,1,8.00,Pi OS,Amazon
+Misc,Pi USB-C Power Supply 5V3A,1,12.00,Official Pi PSU recommended,Amazon
+Total_estimate,,,~270 USD,Pololu drivers increase cost; compatible alternatives are cheaper,

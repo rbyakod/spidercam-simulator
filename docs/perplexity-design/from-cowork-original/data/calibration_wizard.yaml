@@ -1,0 +1,11 @@
+version: 1
+steps:
+  frame_sizing: {done: false, notes: ''}
+  visual_geometry: {done: false, notes: ''}
+  io_check: {done: false, notes: ''}
+  motor_direction: {done: false, notes: ''}
+  homing: {done: false, notes: ''}
+  spool_radius: {done: false, notes: ''}
+  center_zero: {done: false, notes: ''}
+  bounds_verify: {done: false, notes: ''}
+  path_test: {done: false, notes: ''}

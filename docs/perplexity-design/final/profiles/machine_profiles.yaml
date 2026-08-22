@@ -1,0 +1,20 @@
+- name: slow
+  max_speed: 0.1
+  max_accel: 0.2
+  jerk_limit: null
+  description: Safe slow mode for calibration and testing
+- name: normal
+  max_speed: 0.3
+  max_accel: 0.6
+  jerk_limit: null
+  description: Default operation mode
+- name: fast
+  max_speed: 0.5
+  max_accel: 1.0
+  jerk_limit: null
+  description: High-speed mode for dynamic shots
+- name: precision
+  max_speed: 0.05
+  max_accel: 0.1
+  jerk_limit: 0.5
+  description: Ultra-slow for precise positioning

@@ -1,0 +1,17 @@
+Category,Item,Qty,Price_INR,Notes,Source
+Controller,Raspberry Pi 4B 4GB,1,9500,Main compute + GPIO + dashboard,CrazyPi / SilverLine Electronics
+Motor,NEMA 17 42BYGH / 17HS4401 1.7A,4,549 each,Use identical motors only,robu.in / rees52.com
+Driver,DRV8825 with heatsink,5,200 each,Buy one spare,robu.in / robocraze.com / zbotic.in
+Camera,Raspberry Pi Camera Module V2,1,2099,Official 8MP camera,fabtolab.com
+Camera_alt,5MP compatible Pi camera,1,240,Budget option for early testing,IndiaMART
+Cable,Dyneema 8-strand braid 0.8-1.0mm,2 spools,550 each,Low-stretch; both spools for safety margin,IndiaMART
+Frame,2020 T-slot aluminum extrusion 1m,8,199/m,Main frame structure,robu.in
+Safety,Limit switch (micro-switch),4,80 each,NC preferred; one per winch,local electronics shop
+Safety,Emergency stop button (mushroom),1,250,Mandatory before any testing,local electronics shop
+Power,12V 5A DC power supply,1,800,Separate motor power rail,local electronics shop
+Mechanics,Spool+pulley+bearing set,1 set,1500,3D-printed spools + bearings,3D print local
+Mounting,Fasteners + T-nuts + brackets,1 set,800,M3/M5 bolts + T-nuts for extrusion,local hardware
+Wiring,Dupont/JST/wires/connectors,1 set,500,Allow extra for strain relief,local electronics
+Misc,MicroSD card 32GB,1,400,For Raspberry Pi OS,local
+Misc,Pi power supply 5V 3A USB-C,1,499,Official Pi PSU,local
+Total_estimate,,,~19000,Without tools; Pi camera is major cost driver,

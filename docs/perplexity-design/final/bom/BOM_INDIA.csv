@@ -1,0 +1,18 @@
+Part,Qty,Supplier,Approx Price INR,Notes
+Raspberry Pi 4B 4GB,1,RoboElements / Robu.in,7000,Official or clone board
+NEMA 17 Stepper 42Ncm,4,Robu.in / Amazon.in,650 each,17HS4401 equivalent
+DRV8825 Driver Module,4,Robu.in,180 each,With heatsink
+12V 10A SMPS,1,Amazon.in / local,900,Metal enclosed type
+1.5mm Stainless Steel Wire,10m,Hardware store,300,7x7 strand
+Wire rope thimble,8,Hardware store,40 each,For cable termination
+20x20 Aluminium Extrusion 1m,8,Industrybuying,350 each,T-slot 6
+Corner brackets + T-nuts,1 pack,Industrybuying,400,For frame assembly
+M3 x 10mm bolts,50,Hardware store,150,For motor and bracket
+Limit switch SS-5GL,4,Robu.in,50 each,Or equivalent microswitch
+Jumper wires F-F 20cm,40,Any electronics shop,100,GPIO connections
+GPIO breakout board,1,Robu.in,200,40-pin type
+16GB microSD Class 10,1,Amazon.in,400,For Raspberry Pi OS
+Camera module wide angle,1,Robu.in / Amazon.in,1800,5MP or better
+USB-C power for RPi,1,Amazon.in,500,Official 15W recommended
+Heatsinks for DRV8825,4,Amazon.in,60 each,20x14x6mm
+Total (approx),,,,19000-22000 INR

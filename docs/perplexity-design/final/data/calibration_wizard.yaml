@@ -1,0 +1,23 @@
+wizard:
+  reference_position: [0.5, 0.5, 0.5]
+  steps:
+    - id: home
+      title: "Home all axes"
+      description: "Press Run Homing to find the zero position for all 4 cable axes."
+      action: home
+    - id: move_ref
+      title: "Move to reference"
+      description: "Move to the centre of the frame (0.5, 0.5, 0.5 m)."
+      action: move_to_ref
+    - id: measure
+      title: "Measure cable lengths"
+      description: "Measure each cable from the corner anchor to the camera mount in metres."
+      action: measure
+    - id: compute
+      title: "Compute offsets"
+      description: "The system calculates correction offsets and saves them."
+      action: compute
+    - id: verify
+      title: "Verify"
+      description: "Jog the camera to a known position and confirm accuracy within 5 mm."
+      action: verify

@@ -1,0 +1,26 @@
+axes:
+- dir_pin: 18
+  enable_pin: 27
+  name: FL
+  step_pin: 17
+- dir_pin: 23
+  enable_pin: 24
+  name: FR
+  step_pin: 22
+- dir_pin: 6
+  enable_pin: 13
+  name: RL
+  step_pin: 5
+- dir_pin: 26
+  enable_pin: 21
+  name: RR
+  step_pin: 19
+limit_pins:
+- 4
+- 25
+- 12
+- 16
+microstep_pins:
+  M0: 8
+  M1: 7
+  M2: 1

@@ -1,0 +1,17 @@
+Part,Qty,Supplier,Approx Price USD,Notes
+Raspberry Pi 4B 4GB,1,Adafruit / PiShop,55,Check availability
+NEMA 17 Stepper 42Ncm,4,Amazon / StepperOnline,12 each,17HS4401 or equivalent
+DRV8825 Driver Module,4,Amazon / Pololu,8 each,Pololu preferred for quality
+12V 10A SMPS,1,Amazon / Meanwell,18,Meanwell LRS-120-12 recommended
+1.5mm Stainless Steel Wire,10m,Amazon / McMaster,15,7x7 strand
+Wire rope thimble,8,McMaster-Carr / Amazon,2 each,3/32 inch
+20x20 Aluminium Extrusion 1m,8,Misumi / OpenBuilds,8 each,
+Corner brackets,1 pack,OpenBuilds,15,
+M3 hardware pack,1,Amazon,12,Bolts nuts washers
+Limit switch SS-5GL,4,Digikey / Amazon,3 each,
+Jumper wires,40,Amazon,6,
+16GB microSD,1,Amazon,10,Samsung or SanDisk
+Camera module,1,Amazon / Arducam,25,
+USB-C 15W power supply,1,Adafruit,12,Official recommended
+Heatsinks,4,Amazon,5 set,
+Total (approx),,,,310-370 USD

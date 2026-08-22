@@ -1,0 +1,50 @@
+:root {
+  --bg: #0d1117;
+  --surface: #161b22;
+  --border: #30363d;
+  --accent: #58a6ff;
+  --danger: #f85149;
+  --success: #3fb950;
+  --text: #c9d1d9;
+  --text-muted: #8b949e;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  font-size: 14px;
+  color: var(--text);
+  background: var(--bg);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--bg); }
+.app { display: flex; height: 100vh; overflow: hidden; }
+.sidebar { width: 340px; min-width: 280px; background: var(--surface);
+           border-right: 1px solid var(--border); overflow-y: auto;
+           display: flex; flex-direction: column; gap: 0; }
+.main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+.canvas-area { flex: 1; position: relative; }
+.panel { border-bottom: 1px solid var(--border); padding: 12px; }
+.panel h3 { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em;
+            color: var(--text-muted); margin-bottom: 8px; }
+.btn { display: inline-flex; align-items: center; justify-content: center;
+       padding: 6px 14px; border-radius: 6px; border: 1px solid var(--border);
+       background: var(--surface); color: var(--text); cursor: pointer;
+       font-size: 13px; font-weight: 500; transition: all 0.15s; }
+.btn:hover { border-color: var(--accent); color: var(--accent); }
+.btn.danger { border-color: var(--danger); color: var(--danger); }
+.btn.danger:hover { background: var(--danger); color: #fff; }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+.btn.primary:hover { opacity: 0.85; }
+.btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.badge { display: inline-block; padding: 2px 8px; border-radius: 12px;
+         font-size: 11px; font-weight: 600; }
+.badge.ok    { background: #1f4d2b; color: var(--success); }
+.badge.error { background: #4d1f1f; color: var(--danger); }
+.badge.warn  { background: #4d3a1f; color: #d29922; }
+input[type=number], input[type=text], select {
+  width: 100%; padding: 5px 8px; background: var(--bg);
+  border: 1px solid var(--border); border-radius: 4px; color: var(--text);
+  font-size: 13px; }
+input:focus, select:focus { outline: none; border-color: var(--accent); }
+.row { display: flex; gap: 8px; align-items: center; margin-bottom: 6px; }
+.row label { min-width: 56px; color: var(--text-muted); font-size: 12px; }
+.status-dot { width: 8px; height: 8px; border-radius: 50%;
+              background: var(--success); display: inline-block; margin-right: 6px; }
+.status-dot.off { background: var(--danger); }
